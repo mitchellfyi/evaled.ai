@@ -56,9 +56,10 @@ class ScoreDecayNotificationJob < ApplicationJob
 
   def send_notification(agent_score, retention, threshold)
     agent = agent_score.agent
-    return unless agent.user.present?
+    user = agent.owner || agent.claimed_by_user
+    return unless user.present?
 
-    # Log the notification (email sending would be implemented separately)
+    # Log the notification
     Rails.logger.info(
       "[ScoreDecayNotification] Agent '#{agent.name}' (ID: #{agent.id}) " \
       "score has decayed to #{retention.round(1)}% (threshold: #{threshold}%)"
@@ -69,7 +70,7 @@ class ScoreDecayNotificationJob < ApplicationJob
       next_eval_scheduled_at: NOTIFICATION_COOLDOWN_DAYS.days.from_now
     )
 
-    # TODO: Send actual email notification via ActionMailer
-    # AgentScoreMailer.decay_warning(agent.user, agent, agent_score, retention).deliver_later
+    # Send email notification
+    AgentScoreMailer.decay_warning(user, agent, agent_score, retention, threshold).deliver_later
   end
 end

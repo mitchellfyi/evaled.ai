@@ -1,0 +1,24 @@
+⚠️ Score Decay Alert for <%= @agent.name %>
+============================================
+
+Hi <%= @user.email.split('@').first %>,
+
+The score for your agent "<%= @agent.name %>" has decayed below the <%= @threshold %>% retention threshold.
+
+CURRENT STATUS
+--------------
+Current Score: <%= @current_score.round(1) %>
+Original Score: <%= @original_score.round(1) %>
+Score Decay: <%= @decay_percentage %>%
+Score Retention: <%= @retention.round(1) %>%
+
+THRESHOLD CROSSED: <%= @threshold %>%
+
+Score decay occurs naturally over time as evaluations age. To restore your agent's score to its full potential, consider requesting a new evaluation.
+
+View your agent and request a re-evaluation:
+<%= @re_evaluate_url %>
+
+---
+You're receiving this because you own "<%= @agent.name %>" on evaled.ai.
+© <%= Time.current.year %> evaled.ai - Agent Evaluation Platform
