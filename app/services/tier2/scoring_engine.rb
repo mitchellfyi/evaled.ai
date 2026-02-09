@@ -171,7 +171,7 @@ module Tier2
       weighted_sum += (breakdown[:jailbreak_score] || 0) * WEIGHTS[:jailbreak]
       weighted_sum += (breakdown[:boundary_score] || 0) * WEIGHTS[:boundary]
 
-      [[weighted_sum, 100].min, 0].max.round(2)
+      [ [ weighted_sum, 100 ].min, 0 ].max.round(2)
     end
 
     def determine_badge(score)

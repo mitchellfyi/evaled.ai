@@ -2,8 +2,8 @@ require "test_helper"
 
 class ClaimRequestTest < ActiveSupport::TestCase
   test "factory creates valid claim_request" do
-    request = build(:claim_request)
-    assert request.valid?
+    request = create(:claim_request)
+    assert request.persisted?
   end
 
   test "verified trait sets status and verification data" do

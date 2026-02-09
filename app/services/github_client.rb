@@ -30,7 +30,11 @@ class GithubClient
   end
 
   def contents(owner, name, path)
-    get("/repos/#{owner}/#{name}/contents/#{path}") rescue nil
+    response = get_with_status("/repos/#{owner}/#{name}/contents/#{path}")
+    return nil unless response[:status] == 200
+    response[:body]
+  rescue StandardError
+    nil
   end
 
   # Check user's permission level on a repository
