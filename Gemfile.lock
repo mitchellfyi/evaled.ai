@@ -346,6 +346,12 @@ GEM
       logger
     secure_headers (6.7.0)
     securerandom (0.4.1)
+    sentry-rails (6.3.0)
+      railties (>= 5.2.0)
+      sentry-ruby (~> 6.3.0)
+    sentry-ruby (6.3.0)
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.0.2)
     shoulda-matchers (7.0.1)
       activesupport (>= 7.1)
     simplecov (0.22.0)
@@ -457,6 +463,8 @@ DEPENDENCIES
   rolify (~> 6.0)
   rubocop-rails-omakase
   secure_headers (~> 6.5)
+  sentry-rails
+  sentry-ruby
   shoulda-matchers
   simplecov
   solid_cable

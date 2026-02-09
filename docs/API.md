@@ -45,3 +45,7 @@ Response:
 ### Rate Limits
 - 60 requests per minute per API key
 - 100 requests per minute per IP (unauthenticated)
+
+## Error Tracking
+
+This API uses Sentry for error tracking and performance monitoring. All unhandled exceptions and errors are automatically captured and reported in production and staging environments.
