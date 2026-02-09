@@ -48,7 +48,7 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 
 # Authentication
-gem "devise", "~> 4.9"
+gem "devise", "~> 5.0"
 
 # Authorization (RBAC)
 gem "rolify", "~> 6.0"
@@ -57,13 +57,13 @@ gem "pundit", "~> 2.4"
 # Security
 gem "rack-attack", "~> 6.7"
 gem "rack-timeout", "~> 0.7"
-gem "secure_headers", "~> 6.5"
+gem "secure_headers", "~> 7.1"
 
 # HTTP client for GitHub API
 gem "faraday", "~> 2.9"
 
 # Pagination
-gem "pagy", "~> 6.0"
+gem "pagy", "~> 43.2"
 
 # Production logging
 gem "lograge"
