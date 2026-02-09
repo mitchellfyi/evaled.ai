@@ -340,7 +340,7 @@ module Tier0
 
       # Star burst detection (many stars in short time period)
       if stargazer_analysis[:timestamps].size >= 10
-        patterns << "star_burst" if detect_star_burst(stargazer_analysis[:timestamps])
+        patterns << "star_burst" if star_burst?(stargazer_analysis[:timestamps])
       end
 
       # Very low quality ratio
@@ -352,7 +352,7 @@ module Tier0
       patterns
     end
 
-    def detect_star_burst(timestamps)
+    def star_burst?(timestamps)
       return false if timestamps.size < 10
 
       # Parse and sort timestamps
