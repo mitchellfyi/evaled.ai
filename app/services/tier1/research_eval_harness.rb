@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Tier1
   class ResearchEvalHarness
     def initialize(agent, eval_task)
@@ -79,7 +80,7 @@ module Tier1
 
     def evaluate_citations(output)
       # Check for citation patterns [1], (Author, Year), URLs
-      citation_patterns = [ /\[\d+\]/, /\([A-Z][a-z]+,?\s*\d{4}\)/, /https?:\/\/\S+/ ]
+      citation_patterns = [/\[\d+\]/, /\([A-Z][a-z]+,?\s*\d{4}\)/, /https?:\/\/\S+/]
       has_citations = citation_patterns.any? { |p| output.match?(p) }
       has_citations ? 1.0 : 0.5
     end

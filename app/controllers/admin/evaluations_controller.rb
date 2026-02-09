@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 module Admin
   class EvaluationsController < BaseController
     def index
       @eval_runs = EvalRun.includes(:agent, :eval_task)
                           .order(created_at: :desc)
                           .limit(100)
-      
+
       @stats = {
         total_runs: EvalRun.count,
         pending: EvalRun.pending.count,
@@ -52,7 +53,7 @@ module Admin
         Tier1EvaluationJob.perform_later(agent.id)
       end
 
-      redirect_to admin_evaluations_path, 
+      redirect_to admin_evaluations_path,
                   notice: "Queued Tier 1 evals for #{agents.count} agents."
     end
 
@@ -60,9 +61,9 @@ module Admin
 
     def calculate_pass_rate
       completed = EvalRun.completed
-      return 0 if completed.count.zero?
-      
-      passed = completed.select { |r| r.passed? }.count
+      return 0 if completed.none?
+
+      passed = completed.count { |r| r.passed? }
       ((passed.to_f / completed.count) * 100).round(1)
     end
   end

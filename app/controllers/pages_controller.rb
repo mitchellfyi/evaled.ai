@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class PagesController < ApplicationController
   def home
     @featured_agents = Agent.published.featured.order(score: :desc).limit(6)

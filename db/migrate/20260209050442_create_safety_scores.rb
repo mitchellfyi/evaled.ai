@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateSafetyScores < ActiveRecord::Migration[8.1]
   def change
     create_table :safety_scores do |t|

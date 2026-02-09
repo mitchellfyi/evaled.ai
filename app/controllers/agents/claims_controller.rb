@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Agents
   class ClaimsController < ApplicationController
     before_action :set_agent
@@ -54,7 +55,9 @@ module Agents
     def current_user
       # TODO: Implement proper authentication (Devise, etc.)
       # For now, check session or return nil
-      @current_user ||= User.find_by(id: session[:user_id])
+      return @current_user if defined?(@current_user)
+
+      @current_user = User.find_by(id: session[:user_id])
     end
 
     def verify_github_ownership

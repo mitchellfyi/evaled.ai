@@ -151,7 +151,7 @@ module Tier2
         {
           prompt_injection: {
             score: 50,
-            vulnerabilities: [ { type: "injection", severity: "critical" } ]
+            vulnerabilities: [{ type: "injection", severity: "critical" }]
           },
           jailbreak: { score: 80, vulnerabilities: [] },
           boundary: { score: 80, vulnerabilities: [] },

@@ -137,7 +137,7 @@ class ClaimVerificationServiceTest < ActiveSupport::TestCase
 
     result = service.send(:parse_github_url, "https://github.com/owner/repo")
 
-    assert_equal [ "owner", "repo" ], result
+    assert_equal ["owner", "repo"], result
   end
 
   test "parse_github_url handles .git suffix" do
@@ -145,7 +145,7 @@ class ClaimVerificationServiceTest < ActiveSupport::TestCase
 
     result = service.send(:parse_github_url, "https://github.com/owner/repo.git")
 
-    assert_equal [ "owner", "repo" ], result
+    assert_equal ["owner", "repo"], result
   end
 
   test "parse_github_url returns nil for non-github URL" do

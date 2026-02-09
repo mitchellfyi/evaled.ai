@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SandboxCleanupJob < ApplicationJob
   queue_as :low
 

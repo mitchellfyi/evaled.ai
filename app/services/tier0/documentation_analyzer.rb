@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Tier0
   class DocumentationAnalyzer
     README_SECTIONS = %w[ installation usage api examples contributing license ].freeze
@@ -72,7 +73,7 @@ module Tier0
       score += 15 if folder_exists?("docs")
       score += 15 if folder_exists?("examples")
 
-      [ score, 100 ].min
+      [score, 100].min
     end
 
     def parse_repo_url

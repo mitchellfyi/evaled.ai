@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "test_helper"
 
 class Api::V1::DeployGatesControllerTest < ActionDispatch::IntegrationTest
@@ -14,7 +15,7 @@ class Api::V1::DeployGatesControllerTest < ActionDispatch::IntegrationTest
 
   test "check passes when all agents meet threshold" do
     post check_api_v1_deploy_gates_url, params: {
-      agents: [ "high-score", "medium-score" ],
+      agents: ["high-score", "medium-score"],
       min_score: 70
     }, as: :json
 
@@ -29,7 +30,7 @@ class Api::V1::DeployGatesControllerTest < ActionDispatch::IntegrationTest
 
   test "check fails when some agents below threshold" do
     post check_api_v1_deploy_gates_url, params: {
-      agents: [ "high-score", "low-score" ],
+      agents: ["high-score", "low-score"],
       min_score: 70
     }, as: :json
 
@@ -45,7 +46,7 @@ class Api::V1::DeployGatesControllerTest < ActionDispatch::IntegrationTest
 
   test "check uses default min_score of 70" do
     post check_api_v1_deploy_gates_url, params: {
-      agents: [ "medium-score" ]
+      agents: ["medium-score"]
     }, as: :json
 
     assert_response :success
@@ -57,7 +58,7 @@ class Api::V1::DeployGatesControllerTest < ActionDispatch::IntegrationTest
 
   test "check with custom min_score" do
     post check_api_v1_deploy_gates_url, params: {
-      agents: [ "medium-score" ],
+      agents: ["medium-score"],
       min_score: 80
     }, as: :json
 
@@ -89,7 +90,7 @@ class Api::V1::DeployGatesControllerTest < ActionDispatch::IntegrationTest
 
   test "check includes agent not found error for unknown slugs" do
     post check_api_v1_deploy_gates_url, params: {
-      agents: [ "high-score", "nonexistent-agent" ]
+      agents: ["high-score", "nonexistent-agent"]
     }, as: :json
 
     assert_response :unprocessable_entity
@@ -106,7 +107,7 @@ class Api::V1::DeployGatesControllerTest < ActionDispatch::IntegrationTest
 
   test "check treats unpublished agents as not found" do
     post check_api_v1_deploy_gates_url, params: {
-      agents: [ "unpublished" ]
+      agents: ["unpublished"]
     }, as: :json
 
     assert_response :unprocessable_entity
@@ -120,7 +121,7 @@ class Api::V1::DeployGatesControllerTest < ActionDispatch::IntegrationTest
   test "check returns checked_at timestamp" do
     freeze_time do
       post check_api_v1_deploy_gates_url, params: {
-        agents: [ "high-score" ]
+        agents: ["high-score"]
       }, as: :json
 
       json = JSON.parse(response.body)
@@ -130,7 +131,7 @@ class Api::V1::DeployGatesControllerTest < ActionDispatch::IntegrationTest
 
   test "check returns last_verified for each agent" do
     post check_api_v1_deploy_gates_url, params: {
-      agents: [ "high-score" ]
+      agents: ["high-score"]
     }, as: :json
 
     json = JSON.parse(response.body)
@@ -142,7 +143,7 @@ class Api::V1::DeployGatesControllerTest < ActionDispatch::IntegrationTest
 
   test "check returns agent name for found agents" do
     post check_api_v1_deploy_gates_url, params: {
-      agents: [ "high-score" ]
+      agents: ["high-score"]
     }, as: :json
 
     json = JSON.parse(response.body)
@@ -167,7 +168,7 @@ class Api::V1::DeployGatesControllerTest < ActionDispatch::IntegrationTest
 
   test "check with all agents failing" do
     post check_api_v1_deploy_gates_url, params: {
-      agents: [ "low-score", "nonexistent" ],
+      agents: ["low-score", "nonexistent"],
       min_score: 70
     }, as: :json
 
@@ -180,7 +181,7 @@ class Api::V1::DeployGatesControllerTest < ActionDispatch::IntegrationTest
 
   test "check handles minimum score of 0" do
     post check_api_v1_deploy_gates_url, params: {
-      agents: [ "low-score" ],
+      agents: ["low-score"],
       min_score: 0
     }, as: :json
 
@@ -192,7 +193,7 @@ class Api::V1::DeployGatesControllerTest < ActionDispatch::IntegrationTest
 
   test "check handles maximum score of 100" do
     post check_api_v1_deploy_gates_url, params: {
-      agents: [ "high-score" ],
+      agents: ["high-score"],
       min_score: 100
     }, as: :json
 

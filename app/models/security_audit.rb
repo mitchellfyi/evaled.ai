@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SecurityAudit < ApplicationRecord
   belongs_to :agent
 

@@ -23,11 +23,11 @@ class TelemetryAggregationJob < ApplicationJob
   def calculate_period_bounds
     case @period
     when "hourly"
-      [ 1.hour.ago.beginning_of_hour, 1.hour.ago.end_of_hour ]
+      [1.hour.ago.beginning_of_hour, 1.hour.ago.end_of_hour]
     when "weekly"
-      [ 1.week.ago.beginning_of_week, 1.week.ago.end_of_week ]
+      [1.week.ago.beginning_of_week, 1.week.ago.end_of_week]
     else # daily
-      [ 1.day.ago.beginning_of_day, 1.day.ago.end_of_day ]
+      [1.day.ago.beginning_of_day, 1.day.ago.end_of_day]
     end
   end
 

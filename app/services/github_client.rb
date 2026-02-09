@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class GithubClient
   BASE_URL = "https://api.github.com"
 
@@ -85,6 +86,6 @@ class GithubClient
       body: JSON.parse(response.body)
     }
   rescue JSON::ParserError
-    { status: response&.code.to_i || 500, body: {} }
+    { status: response&.code.to_i, body: {} }
   end
 end

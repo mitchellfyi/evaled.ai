@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AgentsController < ApplicationController
   def index
     @agents = Agent.published.order(score: :desc)

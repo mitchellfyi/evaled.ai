@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 Rails.application.routes.draw do
   # Health check
-  get "up" => "rails/health#show", as: :rails_health_check
+  get "up" => "rails/health#show", :as => :rails_health_check
 
   # PWA routes
-  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  get "service-worker" => "rails/pwa#service_worker", :as => :pwa_service_worker
+  get "manifest" => "rails/pwa#manifest", :as => :pwa_manifest
 
   # Public pages
   root "pages#home"
@@ -12,14 +13,14 @@ Rails.application.routes.draw do
   get "methodology", to: "pages#methodology"
 
   # Agent pages (SEO-friendly)
-  resources :agents, only: [ :index, :show ], path: "agents" do
+  resources :agents, only: [:index, :show], path: "agents" do
     member do
       get :badge, to: "badges#show", defaults: { format: :svg }
     end
 
     # Agent profiles and claiming
-    resource :profile, only: [ :show ], controller: "agents/profiles"
-    resource :claim, only: [ :create ], controller: "agents/claims" do
+    resource :profile, only: [:show], controller: "agents/profiles"
+    resource :claim, only: [:create], controller: "agents/claims" do
       post :verify, on: :member
     end
   end
@@ -31,7 +32,7 @@ Rails.application.routes.draw do
   # API v1
   namespace :api do
     namespace :v1 do
-      resources :agents, only: [ :index, :show ] do
+      resources :agents, only: [:index, :show] do
         member do
           get :score
         end
@@ -40,12 +41,12 @@ Rails.application.routes.draw do
           get :search
         end
       end
-      resources :telemetry, only: [ :create ]
-      resources :certifications, only: [ :show, :create ]
+      resources :telemetry, only: [:create]
+      resources :certifications, only: [:show, :create]
 
       # Standalone comparison and search endpoints
-      resources :compare, only: [ :index ]
-      resources :search, only: [ :index ]
+      resources :compare, only: [:index]
+      resources :search, only: [:index]
 
       # CI/CD deploy gate
       resources :deploy_gates, only: [] do
@@ -55,7 +56,7 @@ Rails.application.routes.draw do
       end
 
       # Agent claiming
-      resources :claims, only: [ :create ] do
+      resources :claims, only: [:create] do
         member do
           post :verify
         end
@@ -76,7 +77,7 @@ Rails.application.routes.draw do
       end
     end
     resources :api_keys, only: [:index, :destroy]
-    
+
     # Evaluation observability
     resources :evaluations, only: [:index, :show] do
       collection do

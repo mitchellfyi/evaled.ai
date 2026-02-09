@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 SecureHeaders::Configuration.default do |config|
   config.x_frame_options = "DENY"
   config.x_content_type_options = "nosniff"

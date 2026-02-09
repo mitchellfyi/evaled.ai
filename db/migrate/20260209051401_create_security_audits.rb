@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateSecurityAudits < ActiveRecord::Migration[8.1]
   def change
     create_table :security_audits do |t|

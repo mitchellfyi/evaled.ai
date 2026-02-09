@@ -8,8 +8,8 @@ module Tier1
       @agent = create(:agent)
       @task = create(:eval_task, :research,
         expected_output: {
-          "facts" => [ "fact1", "fact2" ],
-          "keywords" => [ "keyword1", "keyword2" ]
+          "facts" => ["fact1", "fact2"],
+          "keywords" => ["keyword1", "keyword2"]
         }
       )
     end

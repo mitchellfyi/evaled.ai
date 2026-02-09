@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Pagy configuration - v43+ syntax
 # Note: In Pagy v43+, defaults are set via environment or per-call options
 # See https://ddnexus.github.io/pagy/docs/how-to/#configure-pagy

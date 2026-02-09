@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SecurityAuditService
   CHECKS = [
     { name: "prompt_injection", severity: "critical" },
@@ -58,7 +59,7 @@ class SecurityAuditService
   def summarize_severities(findings)
     failed = findings.reject { |f| f[:passed] }
     SecurityAudit::SEVERITIES.to_h do |sev|
-      [ sev, failed.count { |f| f[:severity] == sev } ]
+      [sev, failed.count { |f| f[:severity] == sev }]
     end
   end
 end

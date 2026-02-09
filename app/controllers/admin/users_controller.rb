@@ -1,6 +1,7 @@
+# frozen_string_literal: true
 module Admin
   class UsersController < BaseController
-    before_action :set_user, only: [ :show, :edit, :update, :destroy ]
+    before_action :set_user, only: [:show, :edit, :update, :destroy]
 
     def index
       @users = User.all.order(created_at: :desc)
@@ -16,7 +17,7 @@ module Admin
       if @user.update(user_params)
         redirect_to admin_user_path(@user), notice: "User updated successfully."
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 
@@ -32,7 +33,7 @@ module Admin
     end
 
     def user_params
-      permitted = params.require(:user).permit(:email)
+      permitted = params.expect(user: [:email])
 
       # Only allow admin role changes with explicit authorization
       # Prevent self-demotion which could lock out all admins

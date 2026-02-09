@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ApiKeyPolicy < ApplicationPolicy
   def index?
     true  # Users can see their own keys

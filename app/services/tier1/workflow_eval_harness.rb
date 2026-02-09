@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Tier1
   class WorkflowEvalHarness
     def initialize(agent, eval_task)

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateAgentClaims < ActiveRecord::Migration[8.1]
   def change
     create_table :agent_claims do |t|

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddDecayFieldsToAgentScores < ActiveRecord::Migration[8.1]
   def change
     add_column :agent_scores, :score_at_eval, :decimal

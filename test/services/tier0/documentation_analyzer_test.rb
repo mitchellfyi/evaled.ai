@@ -236,7 +236,7 @@ module Tier0
       stub_request(:get, %r{api.github.com/repos/.*/contents/#{Regexp.escape(path)}})
         .to_return(
           status: 200,
-          body: [ { name: "file1", type: "file" } ].to_json,
+          body: [{ name: "file1", type: "file" }].to_json,
           headers: { "Content-Type" => "application/json" }
         )
     end

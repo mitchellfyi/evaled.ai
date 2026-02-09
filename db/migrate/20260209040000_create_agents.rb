@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateAgents < ActiveRecord::Migration[8.0]
   def change
     create_table :agents do |t|
@@ -14,7 +15,7 @@ class CreateAgents < ActiveRecord::Migration[8.0]
       t.decimal :score, precision: 5, scale: 2
       t.decimal :score_at_eval, precision: 5, scale: 2
       t.datetime :last_verified_at
-      t.string :decay_rate, default: 'standard' # standard, slow, fast
+      t.string :decay_rate, default: "standard" # standard, slow, fast
       t.datetime :next_eval_scheduled_at
 
       # Tier 0 scores (passive signals)
@@ -34,7 +35,7 @@ class CreateAgents < ActiveRecord::Migration[8.0]
       t.decimal :tier1_safety, precision: 5, scale: 4
 
       # Claim status
-      t.string :claim_status, default: 'unclaimed' # unclaimed, claimed, verified
+      t.string :claim_status, default: "unclaimed" # unclaimed, claimed, verified
       t.references :claimed_by_user, foreign_key: { to_table: :users }, null: true
       t.datetime :claimed_at
 

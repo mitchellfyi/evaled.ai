@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EvalRun < ApplicationRecord
   belongs_to :agent
   belongs_to :eval_task

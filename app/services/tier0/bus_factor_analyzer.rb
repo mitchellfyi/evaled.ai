@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Tier0
   class BusFactorAnalyzer
     def initialize(agent)
@@ -25,7 +26,7 @@ module Tier0
     end
 
     def calculate_top_contributor_pct(contributors)
-      return 100.0 if contributors.count == 1
+      return 100.0 if contributors.one?
       total = contributors.sum { |c| c["contributions"] }
       top = contributors.first["contributions"]
       (top.to_f / total * 100).round(1)
@@ -55,7 +56,7 @@ module Tier0
       top_pct = calculate_top_contributor_pct(contributors)
       penalty = top_pct > 80 ? 20 : 0
 
-      [ count_score - penalty, 0 ].max
+      [count_score - penalty, 0].max
     end
 
     def parse_repo_url

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :agent do
     sequence(:name) { |n| "agent-#{n}" }

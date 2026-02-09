@@ -37,14 +37,14 @@ module Api
             message: "Certification application submitted successfully"
           }, status: :created
         else
-          render json: { errors: certification.errors.full_messages }, status: :unprocessable_entity
+          render json: { errors: certification.errors.full_messages }, status: :unprocessable_content
         end
       end
 
       private
 
       def certification_params
-        params.require(:certification).permit(:tier)
+        params.expect(certification: [:tier])
       end
     end
   end

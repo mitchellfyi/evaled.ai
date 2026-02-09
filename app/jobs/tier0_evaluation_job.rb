@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Tier0EvaluationJob < ApplicationJob
   queue_as :default
 

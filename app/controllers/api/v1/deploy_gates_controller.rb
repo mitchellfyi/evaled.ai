@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Api
   module V1
     class DeployGatesController < BaseController
@@ -34,7 +35,7 @@ module Api
           checked_at: Time.current.iso8601,
           agents: results,
           summary: "#{passed_count}/#{results.size} agents passed (min_score: #{min_score})"
-        }, status: all_passed ? :ok : :unprocessable_entity
+        }, status: all_passed ? :ok : :unprocessable_content
       end
 
       private

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Seed top 500 AI agents from GitHub
 # This is idempotent - uses find_or_create_by with github_id
 
@@ -7,7 +8,7 @@ require "json"
 class GithubAgentSeeder
   SEARCH_QUERIES = [
     "ai agent language:python",
-    "ai agent language:typescript", 
+    "ai agent language:typescript",
     "ai agent language:javascript",
     "llm agent",
     "autonomous agent",
@@ -30,10 +31,10 @@ class GithubAgentSeeder
 
   def seed
     puts "Seeding top #{TARGET_COUNT} AI agents from GitHub..."
-    
+
     SEARCH_QUERIES.each do |query|
       break if @seeded_ids.size >= TARGET_COUNT
-      
+
       seed_query(query)
       sleep(RATE_LIMIT_DELAY) # Respect rate limits
     end

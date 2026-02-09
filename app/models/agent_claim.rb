@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AgentClaim < ApplicationRecord
   belongs_to :agent
   belongs_to :user

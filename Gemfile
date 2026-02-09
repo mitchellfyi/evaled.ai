@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 source "https://rubygems.org"
 
 ruby "~> 3.4.0"
@@ -28,9 +29,9 @@ gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
+gem "solid_cable"
 gem "solid_cache"
 gem "solid_queue"
-gem "solid_cable"
 
 # Redis for caching and Action Cable
 gem "redis", "~> 5.0"
@@ -51,8 +52,8 @@ gem "image_processing", "~> 1.2"
 gem "devise", "~> 5.0"
 
 # Authorization (RBAC)
-gem "rolify", "~> 6.0"
 gem "pundit", "~> 2.4"
+gem "rolify", "~> 6.0"
 
 # Security
 gem "rack-attack", "~> 6.7"
@@ -69,8 +70,8 @@ gem "pagy", "~> 43.2"
 gem "lograge"
 
 # Error tracking
-gem "sentry-ruby"
 gem "sentry-rails"
+gem "sentry-ruby"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -99,8 +100,8 @@ group :development do
   gem "bullet"
 
   # Performance profiling
-  gem "rack-mini-profiler"
   gem "memory_profiler"
+  gem "rack-mini-profiler"
 end
 
 group :test do

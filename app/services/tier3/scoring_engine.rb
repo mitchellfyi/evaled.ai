@@ -82,7 +82,7 @@ module Tier3
       # Anomaly penalty reduces the score
       score = base_score + reliability - penalty
 
-      [ [ score, 100 ].min, 0 ].max.round(2)
+      [[score, 100].min, 0].max.round(2)
     end
 
     def calculate_anomaly_penalty(anomaly_result)
@@ -113,7 +113,7 @@ module Tier3
       # Penalty for poor cost efficiency
       base_score -= 10 if telemetry.dig(:cost_efficiency, :efficiency_grade) == "poor"
 
-      [ [ base_score, 100 ].min, 0 ].max
+      [[base_score, 100].min, 0].max
     end
 
     def determine_badge(score)

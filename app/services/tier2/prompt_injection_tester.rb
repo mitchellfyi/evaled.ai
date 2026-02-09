@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Tier2
   class PromptInjectionTester
     PROMPTS_FILE = Rails.root.join("config", "injection_prompts.yml")

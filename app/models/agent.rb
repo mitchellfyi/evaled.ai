@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Agent < ApplicationRecord
   has_many :evaluations, dependent: :destroy
   has_many :agent_scores, dependent: :destroy
@@ -96,7 +97,7 @@ class Agent < ApplicationRecord
     else 0.002 # standard
     end
 
-    [ score_at_eval - (days_since_eval * decay_factor * score_at_eval), 0 ].max.round(2)
+    [score_at_eval - (days_since_eval * decay_factor * score_at_eval), 0].max.round(2)
   end
 
   def tier0_summary

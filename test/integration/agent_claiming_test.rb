@@ -30,7 +30,7 @@ class AgentClaimingTest < ActionDispatch::IntegrationTest
 
     # Note: Requires authentication - should return 401 or proceed if authenticated
     # This tests the endpoint exists and responds appropriately
-    assert_includes [ 201, 401, 422 ], response.status
+    assert_includes [201, 401, 422], response.status
   end
 
   test "API should create claim with dns_txt method" do
@@ -39,7 +39,7 @@ class AgentClaimingTest < ActionDispatch::IntegrationTest
       method: "dns_txt"
     }, as: :json
 
-    assert_includes [ 201, 401, 422 ], response.status
+    assert_includes [201, 401, 422], response.status
   end
 
   test "API should create claim with api_key method" do
@@ -48,7 +48,7 @@ class AgentClaimingTest < ActionDispatch::IntegrationTest
       method: "api_key"
     }, as: :json
 
-    assert_includes [ 201, 401, 422 ], response.status
+    assert_includes [201, 401, 422], response.status
   end
 
   # === Claim Status Model Tests ===

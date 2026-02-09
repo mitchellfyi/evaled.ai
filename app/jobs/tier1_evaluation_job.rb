@@ -1,9 +1,10 @@
+# frozen_string_literal: true
 class Tier1EvaluationJob < ApplicationJob
   queue_as :default
 
   def perform(agent_id)
     agent = Agent.find(agent_id)
-    
+
     # Run coding eval if agent has code capabilities
     EvalTask.coding.find_each do |task|
       Tier1::CodingEvalHarness.new(agent, task).run

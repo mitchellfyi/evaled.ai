@@ -18,8 +18,8 @@ class AgentScoreMailerTest < ActionMailer::TestCase
       email.deliver_now
     end
 
-    assert_equal [ "owner@example.com" ], email.to
-    assert_equal [ "notifications@evaled.ai" ], email.from
+    assert_equal ["owner@example.com"], email.to
+    assert_equal ["notifications@evaled.ai"], email.from
   end
 
   test "decay_warning includes agent name in subject" do
@@ -87,7 +87,7 @@ class AgentScoreMailerTest < ActionMailer::TestCase
   end
 
   test "decay_warning with different thresholds" do
-    [ 90, 80, 70, 60, 50 ].each do |threshold|
+    [90, 80, 70, 60, 50].each do |threshold|
       email = AgentScoreMailer.decay_warning(@user, @agent, @agent_score, threshold - 5, threshold)
 
       assert_includes email.subject, "#{threshold}% threshold"

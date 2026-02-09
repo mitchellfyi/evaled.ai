@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ClaimVerificationService
   def initialize(claim)
     @claim = claim
@@ -65,6 +66,6 @@ class ClaimVerificationService
   def parse_github_url(url)
     match = url.match(%r{github\.com/([^/]+)/([^/]+)})
     return nil unless match
-    [ match[1], match[2].sub(/\.git$/, "") ]
+    [match[1], match[2].sub(/\.git$/, "")]
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class BadgesController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [ :show ]
+  skip_before_action :verify_authenticity_token, only: [:show]
 
   VALID_STYLES = %w[ flat plastic for-the-badge ].freeze
   VALID_TYPES = %w[ score tier safety certification ].freeze
@@ -9,7 +9,7 @@ class BadgesController < ApplicationController
   def show
     # Support both /badge/:agent_name and /agents/:id/badge routes
     agent = if params[:id].present?
-      Agent.published.find_by(slug: params[:id]) || Agent.published.find_by(id: params[:id])
+              Agent.published.find_by(slug: params[:id]) || Agent.published.find_by(id: params[:id])
     else
       Agent.find_by(name: params[:agent_name])
     end

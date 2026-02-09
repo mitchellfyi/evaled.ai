@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EvalTask < ApplicationRecord
   has_many :eval_runs, dependent: :destroy
 

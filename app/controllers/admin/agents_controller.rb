@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Admin
   class AgentsController < BaseController
     before_action :set_agent, only: [:show, :edit, :update, :destroy, :run_tier0, :run_tier1, :run_tier2]
@@ -16,7 +17,7 @@ module Admin
       if @agent.update(agent_params)
         redirect_to admin_agent_path(@agent), notice: "Agent updated successfully."
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 
@@ -48,7 +49,7 @@ module Admin
     end
 
     def agent_params
-      params.require(:agent).permit(:name, :slug, :description, :repo_url, :active)
+      params.expect(agent: [:name, :slug, :description, :repo_url, :active])
     end
   end
 end

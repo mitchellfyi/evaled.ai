@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module AgentsHelper
   def score_color_class(score)
     return "text-gray-400" unless score

@@ -1,0 +1,142 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold">Job Queue Management</h1>
+    <div class="flex gap-2">
+      <%= button_to "Pause All", pause_all_admin_jobs_path, method: :post,
+          class: "bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700" %>
+      <%= button_to "Resume All", resume_all_admin_jobs_path, method: :post,
+          class: "bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" %>
+      <%= button_to "Run Tier 0 Refresh", run_tier0_refresh_admin_jobs_path, method: :post,
+          class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div class="bg-yellow-50 rounded-lg shadow p-4">
+      <div class="text-2xl font-bold text-yellow-600"><%= @jobs[:pending] %></div>
+      <div class="text-gray-600 text-sm">Pending Jobs</div>
+    </div>
+    <div class="bg-blue-50 rounded-lg shadow p-4">
+      <div class="text-2xl font-bold text-blue-600"><%= @jobs[:scheduled] %></div>
+      <div class="text-gray-600 text-sm">Scheduled</div>
+    </div>
+    <div class="bg-red-50 rounded-lg shadow p-4">
+      <div class="text-2xl font-bold text-red-600"><%= @jobs[:failed] %></div>
+      <div class="text-gray-600 text-sm">Failed</div>
+    </div>
+    <div class="bg-green-50 rounded-lg shadow p-4">
+      <div class="text-2xl font-bold text-green-600"><%= @jobs[:completed_today] %></div>
+      <div class="text-gray-600 text-sm">Completed Today</div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Queues -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      <div class="px-6 py-4 border-b">
+        <h2 class="text-xl font-semibold">Queues</h2>
+      </div>
+      <% if @queues.any? %>
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Size</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <% @queues.each do |queue| %>
+              <tr>
+                <td class="px-6 py-4 font-medium"><%= queue.name %></td>
+                <td class="px-6 py-4">
+                  <% if queue.paused? %>
+                    <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-sm">Paused</span>
+                  <% else %>
+                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">Running</span>
+                  <% end %>
+                </td>
+                <td class="px-6 py-4 text-gray-500"><%= queue.size %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <div class="p-6 text-gray-500">No queues found.</div>
+      <% end %>
+    </div>
+
+    <!-- Recurring Jobs -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      <div class="px-6 py-4 border-b">
+        <h2 class="text-xl font-semibold">Scheduled Jobs</h2>
+      </div>
+      <% if @recurring.any? %>
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Schedule</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Queue</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <% @recurring.each do |job| %>
+              <tr>
+                <td class="px-6 py-4">
+                  <div class="font-medium"><%= job[:name] %></div>
+                  <div class="text-sm text-gray-500"><%= job[:class] %></div>
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-600"><%= job[:schedule] %></td>
+                <td class="px-6 py-4">
+                  <span class="px-2 py-1 bg-gray-100 rounded text-sm"><%= job[:queue] %></span>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <div class="p-6 text-gray-500">No recurring jobs configured.</div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Failed Jobs -->
+  <% if @recent_failed.any? %>
+    <div class="bg-white rounded-lg shadow overflow-hidden mt-8">
+      <div class="px-6 py-4 border-b">
+        <h2 class="text-xl font-semibold text-red-600">Recent Failed Jobs</h2>
+      </div>
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Job Class</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Error</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Failed At</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <% @recent_failed.each do |failed| %>
+            <tr>
+              <td class="px-6 py-4 font-medium"><%= failed.job.class_name %></td>
+              <td class="px-6 py-4 text-sm text-red-600">
+                <%= failed.error&.dig("message")&.truncate(100) || "Unknown error" %>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500">
+                <%= time_ago_in_words(failed.created_at) %> ago
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <div class="mt-8 p-4 bg-gray-100 rounded-lg">
+    <p class="text-sm text-gray-600">
+      <strong>Note:</strong> For detailed job management (retry, delete, inspect), 
+      use the <%= link_to "Mission Control dashboard", "/admin/mission_control", class: "text-blue-600 hover:underline" %>.
+    </p>
+  </div>
+</div>

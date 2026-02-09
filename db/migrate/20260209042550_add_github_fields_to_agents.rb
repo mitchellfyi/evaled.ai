@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddGithubFieldsToAgents < ActiveRecord::Migration[8.1]
   def change
     add_column :agents, :github_id, :integer

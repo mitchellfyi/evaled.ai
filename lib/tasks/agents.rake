@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :agents do
   desc "Seed agents from GitHub"
   task seed: :environment do

@@ -82,7 +82,7 @@ module Tier3
     test "spike_detected is boolean" do
       result = @scorer.analyze
 
-      assert [ true, false ].include?(result[:error_trends][:spike_detected])
+      assert [true, false].include?(result[:error_trends][:spike_detected])
     end
   end
 end

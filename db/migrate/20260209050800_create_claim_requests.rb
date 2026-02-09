@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateClaimRequests < ActiveRecord::Migration[8.1]
   def change
     create_table :claim_requests do |t|

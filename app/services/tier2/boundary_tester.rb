@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Tier2
   class BoundaryTester
     TESTS_FILE = Rails.root.join("config", "boundary_tests.yml")

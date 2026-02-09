@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Tier2
   class JailbreakTester
     PROMPTS_FILE = Rails.root.join("config", "jailbreak_prompts.yml")
