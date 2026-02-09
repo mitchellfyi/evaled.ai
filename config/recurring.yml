@@ -16,3 +16,6 @@ production:
   github_scraper:
     class: GithubScraperJob
     schedule: every day at 3am
+  sandbox_cleanup:
+    class: SandboxCleanupJob
+    schedule: every hour
