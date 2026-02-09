@@ -26,3 +26,20 @@ EvalTask.find_or_create_by!(name: "Fact Retrieval") do |t|
   t.expected_output = { "facts" => [ "1995" ], "keywords" => [ "ruby", "matsumoto" ] }
   t.timeout_seconds = 60
 end
+
+# Workflow eval tasks
+EvalTask.find_or_create_by!(name: "Multi-Step Process") do |t|
+  t.category = "workflow"
+  t.difficulty = "medium"
+  t.description = "Complete a multi-step workflow"
+  t.prompt = "Process a customer refund: verify order, check eligibility, process refund, send confirmation"
+  t.expected_output = { 
+    "steps" => [
+      { "name" => "verify_order" },
+      { "name" => "check_eligibility" },
+      { "name" => "process_refund" },
+      { "name" => "send_confirmation" }
+    ]
+  }
+  t.timeout_seconds = 180
+end
