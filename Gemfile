@@ -103,6 +103,7 @@ end
 
 group :test do
   gem "factory_bot_rails"
+  gem "mocha"
   gem "shoulda-matchers"
   gem "simplecov", require: false
   gem "webmock"

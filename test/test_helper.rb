@@ -9,6 +9,7 @@ require_relative "../config/environment"
 require "rails/test_help"
 require "factory_bot_rails"
 require "webmock/minitest"
+require "mocha/minitest"
 require "ostruct"
 
 # Disable all external HTTP requests by default
