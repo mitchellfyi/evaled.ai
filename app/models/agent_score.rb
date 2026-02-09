@@ -17,6 +17,10 @@ class AgentScore < ApplicationRecord
       .or(where(next_eval_scheduled_at: nil))
   }
 
+  # Webhook notifications for score changes
+  after_create :notify_webhook_created
+  after_update :notify_webhook_updated, if: :score_changed?
+
   # Returns the current decayed score based on time elapsed since evaluation
   #
   # @return [Float] The decayed score value (0-100)
@@ -47,5 +51,40 @@ class AgentScore < ApplicationRecord
       last_verified_at: Time.current,
       next_eval_scheduled_at: nil
     )
+  end
+
+  private
+
+  def score_changed?
+    saved_change_to_overall_score? || saved_change_to_score_at_eval?
+  end
+
+  def webhook_payload
+    {
+      agent_id: agent_id,
+      agent_slug: agent.slug,
+      agent_name: agent.name,
+      score_id: id,
+      tier: tier,
+      overall_score: overall_score,
+      decayed_score: decayed_score,
+      score_at_eval: score_at_eval,
+      decay_rate: decay_rate,
+      evaluated_at: evaluated_at&.iso8601,
+      expires_at: expires_at&.iso8601,
+      breakdown: breakdown
+    }
+  end
+
+  def notify_webhook_created
+    WebhookService.trigger(agent, "score.created", webhook_payload)
+  rescue StandardError => e
+    Rails.logger.error("[Webhook] Failed to trigger score.created: #{e.message}")
+  end
+
+  def notify_webhook_updated
+    WebhookService.trigger(agent, "score.updated", webhook_payload)
+  rescue StandardError => e
+    Rails.logger.error("[Webhook] Failed to trigger score.updated: #{e.message}")
   end
 end

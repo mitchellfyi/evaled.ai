@@ -8,6 +8,7 @@ class Agent < ApplicationRecord
   has_many :agent_claims, dependent: :destroy
   has_many :security_audits, dependent: :destroy
   has_many :security_certifications, dependent: :destroy
+  has_many :webhook_endpoints, dependent: :destroy
   belongs_to :claimed_by_user, class_name: "User", optional: true
 
   validates :name, presence: true

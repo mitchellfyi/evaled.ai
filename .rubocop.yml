@@ -1,20 +1,38 @@
+require:
+  - rubocop-github
+  - rubocop-github-rails
+  - rubocop-performance
+  - rubocop-rails
+
 inherit_gem:
-  rubocop-rails-omakase: rubocop.yml
+  rubocop-github:
+    - config/default.yml
+    - config/rails.yml
 
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.4
+  Exclude:
+    - 'bin/**/*'
+    - 'db/schema.rb'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+    - 'tmp/**/*'
 
-# Project-specific overrides
-Style/Documentation:
-  Enabled: false
+# Rails-specific settings
+Rails:
+  Enabled: true
 
+# Allow longer blocks in tests and config
 Metrics/BlockLength:
   Exclude:
     - 'config/routes.rb'
+    - 'config/environments/*.rb'
     - 'spec/**/*'
     - 'test/**/*'
 
-# Temporarily disable until we identify remaining violations
-Layout/SpaceInsideArrayLiteralBrackets:
-  Enabled: false
+# Allow longer methods in tests
+Metrics/MethodLength:
+  Exclude:
+    - 'test/**/*'
+    - 'db/migrate/*'
