@@ -34,10 +34,11 @@ Rails.application.routes.draw do
     end
   end
 
-  # Admin namespace (TODO: add authentication)
+  # Admin namespace with authentication
   namespace :admin do
-    resources :agents
-    resources :evaluations, only: [:index, :show]
-    root to: "agents#index"
+    root to: 'dashboard#index'
+    resources :users, only: [:index, :show, :edit, :update, :destroy]
+    resources :agents, only: [:index, :show, :edit, :update, :destroy]
+    resources :api_keys, only: [:index, :destroy]
   end
 end
