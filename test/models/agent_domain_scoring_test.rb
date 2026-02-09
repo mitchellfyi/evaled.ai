@@ -4,7 +4,7 @@ require "test_helper"
 
 class AgentDomainScoringTest < ActiveSupport::TestCase
   setup do
-    @agent = agents(:claude)
+    @agent = create(:agent, :published, :with_score)
   end
 
   test "DOMAINS constant matches EvalTask categories" do
