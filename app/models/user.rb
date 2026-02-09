@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   rolify
   has_many :claimed_agents, class_name: 'Agent', foreign_key: :claimed_by_user_id
+  has_many :api_keys, dependent: :destroy
 
   validates :email, presence: true, uniqueness: true
 
