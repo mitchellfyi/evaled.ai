@@ -5,12 +5,19 @@ require "webmock/minitest"
 
 class AgentClaimingTest < ActionDispatch::IntegrationTest
   setup do
+    @original_github_token = ENV["GITHUB_TOKEN"]
+    ENV["GITHUB_TOKEN"] = "test-token"
+
     @agent = create(:agent, :published,
       name: "ClaimableAgent",
       slug: "claimable-agent",
       repo_url: "https://github.com/testuser/claimable-agent"
     )
     @user = create(:user)
+  end
+
+  teardown do
+    ENV["GITHUB_TOKEN"] = @original_github_token
   end
 
   # === API Claim Creation Tests ===
@@ -229,6 +236,8 @@ class AgentClaimingTest < ActionDispatch::IntegrationTest
   # === GitHub Repo Access Verification Tests ===
 
   test "verify_repo_access returns true for admin permission" do
+    original_token = ENV["GITHUB_TOKEN"]
+    ENV["GITHUB_TOKEN"] = "fake_test_token"
     WebMock.enable!
     stub_request(:get, "https://api.github.com/repos/testuser/claimable-agent/collaborators/verifyuser/permission")
       .to_return(
@@ -241,10 +250,14 @@ class AgentClaimingTest < ActionDispatch::IntegrationTest
     result = controller.send(:verify_repo_access, "https://github.com/testuser/claimable-agent", "verifyuser")
 
     assert result
+  ensure
+    ENV["GITHUB_TOKEN"] = original_token
     WebMock.disable!
   end
 
   test "verify_repo_access returns true for maintain permission" do
+    original_token = ENV["GITHUB_TOKEN"]
+    ENV["GITHUB_TOKEN"] = "fake_test_token"
     WebMock.enable!
     stub_request(:get, "https://api.github.com/repos/testuser/claimable-agent/collaborators/maintainer/permission")
       .to_return(
@@ -257,10 +270,14 @@ class AgentClaimingTest < ActionDispatch::IntegrationTest
     result = controller.send(:verify_repo_access, "https://github.com/testuser/claimable-agent", "maintainer")
 
     assert result
+  ensure
+    ENV["GITHUB_TOKEN"] = original_token
     WebMock.disable!
   end
 
   test "verify_repo_access returns false for write permission" do
+    original_token = ENV["GITHUB_TOKEN"]
+    ENV["GITHUB_TOKEN"] = "fake_test_token"
     WebMock.enable!
     stub_request(:get, "https://api.github.com/repos/testuser/claimable-agent/collaborators/writer/permission")
       .to_return(
@@ -273,10 +290,14 @@ class AgentClaimingTest < ActionDispatch::IntegrationTest
     result = controller.send(:verify_repo_access, "https://github.com/testuser/claimable-agent", "writer")
 
     assert_not result
+  ensure
+    ENV["GITHUB_TOKEN"] = original_token
     WebMock.disable!
   end
 
   test "verify_repo_access returns false for read permission" do
+    original_token = ENV["GITHUB_TOKEN"]
+    ENV["GITHUB_TOKEN"] = "fake_test_token"
     WebMock.enable!
     stub_request(:get, "https://api.github.com/repos/testuser/claimable-agent/collaborators/reader/permission")
       .to_return(
@@ -289,10 +310,14 @@ class AgentClaimingTest < ActionDispatch::IntegrationTest
     result = controller.send(:verify_repo_access, "https://github.com/testuser/claimable-agent", "reader")
 
     assert_not result
+  ensure
+    ENV["GITHUB_TOKEN"] = original_token
     WebMock.disable!
   end
 
   test "verify_repo_access returns false for non-collaborator" do
+    original_token = ENV["GITHUB_TOKEN"]
+    ENV["GITHUB_TOKEN"] = "fake_test_token"
     WebMock.enable!
     stub_request(:get, "https://api.github.com/repos/testuser/claimable-agent/collaborators/stranger/permission")
       .to_return(status: 404, body: { message: "Not Found" }.to_json)
@@ -301,10 +326,14 @@ class AgentClaimingTest < ActionDispatch::IntegrationTest
     result = controller.send(:verify_repo_access, "https://github.com/testuser/claimable-agent", "stranger")
 
     assert_not result
+  ensure
+    ENV["GITHUB_TOKEN"] = original_token
     WebMock.disable!
   end
 
   test "verify_repo_access handles rate limit gracefully" do
+    original_token = ENV["GITHUB_TOKEN"]
+    ENV["GITHUB_TOKEN"] = "fake_test_token"
     WebMock.enable!
     stub_request(:get, "https://api.github.com/repos/testuser/claimable-agent/collaborators/testuser/permission")
       .to_return(
@@ -316,10 +345,14 @@ class AgentClaimingTest < ActionDispatch::IntegrationTest
     result = controller.send(:verify_repo_access, "https://github.com/testuser/claimable-agent", "testuser")
 
     assert_not result
+  ensure
+    ENV["GITHUB_TOKEN"] = original_token
     WebMock.disable!
   end
 
   test "verify_repo_access parses different repo URL formats" do
+    original_token = ENV["GITHUB_TOKEN"]
+    ENV["GITHUB_TOKEN"] = "fake_test_token"
     WebMock.enable!
 
     # Test with https://github.com/ format
@@ -336,7 +369,8 @@ class AgentClaimingTest < ActionDispatch::IntegrationTest
 
     # Short format
     assert controller.send(:verify_repo_access, "owner/repo", "user")
-
+  ensure
+    ENV["GITHUB_TOKEN"] = original_token
     WebMock.disable!
   end
 

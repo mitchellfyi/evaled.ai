@@ -65,7 +65,7 @@ module Tier3
 
     test "grades are valid strings" do
       result = @scorer.analyze
-      valid_grades = %w[excellent good acceptable poor]
+      valid_grades = %w[ excellent good acceptable poor ]
 
       assert_includes valid_grades, result[:success_rate][:grade]
       assert_includes valid_grades, result[:latency][:grade]
@@ -74,7 +74,7 @@ module Tier3
 
     test "trend is a valid symbol" do
       result = @scorer.analyze
-      valid_trends = %i[increasing decreasing stable]
+      valid_trends = %i[ increasing decreasing stable ]
 
       assert_includes valid_trends, result[:error_trends][:trend]
     end
@@ -82,7 +82,7 @@ module Tier3
     test "spike_detected is boolean" do
       result = @scorer.analyze
 
-      assert [true, false].include?(result[:error_trends][:spike_detected])
+      assert [ true, false ].include?(result[:error_trends][:spike_detected])
     end
   end
 end

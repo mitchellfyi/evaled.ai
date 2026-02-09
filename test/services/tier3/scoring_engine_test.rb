@@ -66,7 +66,7 @@ module Tier3
       score = @engine.evaluate
 
       assert score.breakdown.key?("badge")
-      valid_badges = %w[🟢 🔵 🟡 🔴]
+      valid_badges = %w[ 🟢 🔵 🟡 🔴 ]
       assert_includes valid_badges, score.breakdown["badge"]
     end
 
@@ -108,7 +108,7 @@ module Tier3
     test "health_status reflects anomaly analysis" do
       score = @engine.evaluate
 
-      valid_statuses = %w[healthy stable at_risk degraded]
+      valid_statuses = %w[ healthy stable at_risk degraded ]
       assert_includes valid_statuses, score.breakdown["health_status"]
     end
 

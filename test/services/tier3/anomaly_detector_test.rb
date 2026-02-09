@@ -61,7 +61,7 @@ module Tier3
 
     test "anomaly types are valid" do
       result = @detector.detect
-      valid_types = %w[performance_drop error_spike unusual_usage]
+      valid_types = %w[ performance_drop error_spike unusual_usage ]
 
       result[:anomalies].each do |anomaly|
         assert_includes valid_types, anomaly[:type]
@@ -70,7 +70,7 @@ module Tier3
 
     test "severity levels are valid" do
       result = @detector.detect
-      valid_severities = %w[info warning critical]
+      valid_severities = %w[ info warning critical ]
 
       result[:anomalies].each do |anomaly|
         assert_includes valid_severities, anomaly[:severity]
@@ -79,7 +79,7 @@ module Tier3
 
     test "health_status is valid" do
       result = @detector.detect
-      valid_statuses = %w[healthy stable at_risk degraded]
+      valid_statuses = %w[ healthy stable at_risk degraded ]
 
       assert_includes valid_statuses, result[:health_status]
     end

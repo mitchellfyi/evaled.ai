@@ -133,7 +133,7 @@ module Tier3
       when SUCCESS_RATE_THRESHOLDS[:acceptable]...SUCCESS_RATE_THRESHOLDS[:good]
         75
       else
-        [50 * (rate / SUCCESS_RATE_THRESHOLDS[:acceptable]), 0].max.round
+        [ 50 * (rate / SUCCESS_RATE_THRESHOLDS[:acceptable]), 0 ].max.round
       end
     end
 
@@ -186,7 +186,7 @@ module Tier3
       else
         # Degrade score proportionally for values above acceptable
         max_value = thresholds[:acceptable][percentile] * 2
-        [50 * (1 - (value - thresholds[:acceptable][percentile]) / max_value.to_f), 0].max.round
+        [ 50 * (1 - (value - thresholds[:acceptable][percentile]) / max_value.to_f), 0 ].max.round
       end
     end
 
@@ -222,7 +222,7 @@ module Tier3
       base_score = 100
 
       # Penalize for high error average
-      base_score -= [trends[:average_per_hour] * 2, 30].min
+      base_score -= [ trends[:average_per_hour] * 2, 30 ].min
 
       # Penalize for spikes
       base_score -= 20 if trends[:spike_detected]
@@ -233,7 +233,7 @@ module Tier3
       # Penalty for worsening trend
       base_score -= 15 if trends[:trend] == :increasing
 
-      [[base_score, 100].min, 0].max.round
+      [ [ base_score, 100 ].min, 0 ].max.round
     end
 
     def calculate_trend(counts)
@@ -296,7 +296,7 @@ module Tier3
         base_score -= 15 # Costs increasing significantly
       end
 
-      [[base_score, 100].min, 0].max
+      [ [ base_score, 100 ].min, 0 ].max
     end
 
     def grade_cost_efficiency(costs)

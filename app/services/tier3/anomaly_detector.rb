@@ -9,7 +9,7 @@ module Tier3
     # - Error rate spikes
     # - Unusual usage patterns
 
-    SEVERITY_LEVELS = %w[info warning critical].freeze
+    SEVERITY_LEVELS = %w[ info warning critical ].freeze
 
     # Thresholds for anomaly detection
     PERFORMANCE_DROP_THRESHOLD = 0.20    # 20% drop is significant
