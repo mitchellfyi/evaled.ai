@@ -31,6 +31,7 @@ Rails.application.routes.draw do
           get :search
         end
       end
+      resources :telemetry, only: [ :create ]
     end
   end
 
