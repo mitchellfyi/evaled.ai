@@ -60,6 +60,12 @@ gem "secure_headers", "~> 6.5"
 # HTTP client for GitHub API
 gem "faraday", "~> 2.9"
 
+# Pagination
+gem "pagy", "~> 6.0"
+
+# Production logging
+gem "lograge"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -83,6 +89,10 @@ group :development do
 
   # N+1 query detection
   gem "bullet"
+
+  # Performance profiling
+  gem "rack-mini-profiler"
+  gem "memory_profiler"
 end
 
 group :test do
