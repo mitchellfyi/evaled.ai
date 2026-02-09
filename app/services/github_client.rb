@@ -108,7 +108,11 @@ class GithubClient
 
   # Fetch forkers (users who forked the repo)
   def forks(owner, name, per_page: 100, page: 1)
-    get("/repos/#{owner}/#{name}/forks", per_page: per_page, page: page, sort: "newest")
+    result = get("/repos/#{owner}/#{name}/forks", per_page: per_page, page: page, sort: "newest")
+    # Handle error responses (API returns hash with "message" key on errors)
+    return [] unless result.is_a?(Array)
+
+    result
   rescue StandardError => e
     Rails.logger.warn("Failed to fetch forks for #{owner}/#{name}: #{e.message}")
     []
