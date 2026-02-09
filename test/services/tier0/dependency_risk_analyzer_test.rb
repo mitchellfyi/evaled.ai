@@ -58,6 +58,7 @@ module Tier0
       }
       stub_contents("package.json", content: package_json.to_json)
       stub_default_contents
+      stub_dependabot_alerts(count: 0)
 
       result = DependencyRiskAnalyzer.new(@agent).analyze
 

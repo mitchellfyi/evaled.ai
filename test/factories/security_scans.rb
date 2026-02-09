@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :security_scan do
     association :agent
     scan_type { "full" }
-    findings { [{ type: "info", description: "No issues found" }] }
+    findings { [ { type: "info", description: "No issues found" } ] }
     severity_counts { { critical: 0, high: 0, medium: 0, low: 0, unknown: 0 } }
     passed { true }
     scanned_at { Time.current }
@@ -22,7 +22,7 @@ FactoryBot.define do
 
     trait :failed do
       passed { false }
-      findings { [{ type: "error", severity: "critical", description: "Critical issue" }] }
+      findings { [ { type: "error", severity: "critical", description: "Critical issue" } ] }
       severity_counts { { critical: 1, high: 0, medium: 0, low: 0, unknown: 0 } }
     end
   end
