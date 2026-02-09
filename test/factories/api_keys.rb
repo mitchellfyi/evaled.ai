@@ -8,7 +8,7 @@ FactoryBot.define do
     end
 
     trait :with_ip_restriction do
-      allowed_ips { ["192.168.1.0/24", "10.0.0.1"] }
+      allowed_ips { [ "192.168.1.0/24", "10.0.0.1" ] }
     end
   end
 end

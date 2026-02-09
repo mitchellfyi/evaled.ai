@@ -62,7 +62,7 @@ module Tier0
       base = 100
       base -= alerts * 15  # -15 per open alert
       base -= 20 unless has_lock  # -20 for no lockfile
-      [base, 0].max
+      [ base, 0 ].max
     end
 
     def parse_repo_url

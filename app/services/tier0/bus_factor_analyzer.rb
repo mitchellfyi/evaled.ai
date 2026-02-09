@@ -45,17 +45,17 @@ module Tier0
 
     def calculate_score(contributors)
       count_score = case contributors.count
-        when 5.. then 100
-        when 3..4 then 70
-        when 2 then 40
-        else 20
+      when 5.. then 100
+      when 3..4 then 70
+      when 2 then 40
+      else 20
       end
 
       # Penalty if top contributor > 80%
       top_pct = calculate_top_contributor_pct(contributors)
       penalty = top_pct > 80 ? 20 : 0
 
-      [count_score - penalty, 0].max
+      [ count_score - penalty, 0 ].max
     end
 
     def parse_repo_url
