@@ -11,6 +11,10 @@
         <%= agent.decayed_score&.round || 'N/A' %>
       </div>
       <div class="text-xs text-gray-400">Evald Score</div>
+      <% confidence = agent.confidence_level %>
+      <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium mt-1 <%= confidence_badge_class(confidence) %>" title="<%= confidence_tooltip(confidence) %>">
+        <%= confidence_label(confidence) %>
+      </span>
     </div>
   </div>
   

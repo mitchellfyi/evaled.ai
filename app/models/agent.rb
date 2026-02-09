@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Agent < ApplicationRecord
   has_many :evaluations, dependent: :destroy
+  has_many :eval_runs, dependent: :destroy
   has_many :agent_scores, dependent: :destroy
   has_many :agent_telemetry_stats, dependent: :destroy
   has_many :certifications, dependent: :destroy
@@ -210,7 +211,62 @@ class Agent < ApplicationRecord
     security_certifications.active.by_type(type).order(:level).last&.level
   end
 
+  CONFIDENCE_LEVELS = %w[ insufficient low medium high ].freeze
+
+  # Compute confidence level based on data availability and recency
+  def confidence_level
+    @confidence_level ||= confidence_factors[:level]
+  end
+
+  # Detailed breakdown of confidence calculation
+  def confidence_factors
+    @confidence_factors ||= compute_confidence_factors
+  end
+
   private
+
+  def compute_confidence_factors
+    has_tier0 = tier0_summary.values.any?(&:present?)
+    has_tier1 = tier1_summary.values.any?(&:present?)
+    tier1_complete = has_tier1 && tier1_summary.size == TIER1_WEIGHTS.size
+
+    completed_runs = eval_runs.completed
+    tier1_run_count = completed_runs.count
+
+    recent_cutoff = 30.days.ago
+    recent_eval = last_verified_at.present? && last_verified_at > recent_cutoff
+
+    run_scores = completed_runs.where.not(metrics: nil)
+      .pluck(:metrics)
+      .filter_map { |m| m["score"]&.to_f }
+    low_variance = if run_scores.size >= 2
+      mean = run_scores.sum / run_scores.size
+      variance = run_scores.sum { |s| (s - mean)**2 } / run_scores.size
+      variance < 100 # standard deviation < 10 points
+    else
+      false
+    end
+
+    # High requires: complete tiers, multiple runs, recent data, and consistent scores
+    level = if has_tier0 && tier1_complete && tier1_run_count >= 2 && recent_eval && low_variance
+              "high"
+            elsif has_tier0 && (has_tier1 || evaluations.completed.by_tier("tier0").where("created_at > ?", 60.days.ago).any?)
+              "medium"
+            elsif has_tier0
+              "low"
+            else
+              "insufficient"
+            end
+
+    {
+      level: level,
+      has_tier0: has_tier0,
+      has_tier1: has_tier1,
+      tier1_run_count: tier1_run_count,
+      recent_eval: recent_eval,
+      low_variance: low_variance
+    }
+  end
 
   def generate_slug
     self.slug ||= name&.parameterize
