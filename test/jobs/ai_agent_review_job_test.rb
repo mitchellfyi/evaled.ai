@@ -17,8 +17,7 @@ class AiAgentReviewJobTest < ActiveSupport::TestCase
   end
 
   test "performs review on pending agent" do
-    mock_reviewer = mock("reviewer")
-    mock_reviewer.expects(:review).returns({
+    review_result = {
       "is_agent" => true,
       "classification" => "agent",
       "confidence" => 0.85,
@@ -26,8 +25,25 @@ class AiAgentReviewJobTest < ActiveSupport::TestCase
       "description" => "A coding agent",
       "capabilities" => ["code_gen"],
       "reasoning" => "Clear agent behavior"
-    })
-    AiAgentReviewer.expects(:new).returns(mock_reviewer)
+    }
+
+    # Create a fake reviewer that updates the agent like the real one
+    pending_agent = @pending_agent
+    fake_reviewer = Object.new
+    fake_reviewer.define_singleton_method(:review) do
+      pending_agent.update!(
+        ai_classification: review_result["classification"],
+        ai_confidence: review_result["confidence"],
+        ai_categories: review_result["categories"],
+        ai_description: review_result["description"],
+        ai_capabilities: review_result["capabilities"],
+        ai_reasoning: review_result["reasoning"],
+        ai_reviewed_at: Time.current,
+        is_agent: review_result["is_agent"]
+      )
+      review_result
+    end
+    AiAgentReviewer.stubs(:new).returns(fake_reviewer)
 
     AiAgentReviewJob.perform_now(@pending_agent.id)
 
@@ -98,8 +114,7 @@ class AiAgentReviewJobTest < ActiveSupport::TestCase
   end
 
   test "leaves low confidence agents pending for manual review" do
-    mock_reviewer = mock("reviewer")
-    mock_reviewer.expects(:review).returns({
+    review_result = {
       "is_agent" => true,
       "classification" => "agent",
       "confidence" => 0.6,
@@ -107,8 +122,25 @@ class AiAgentReviewJobTest < ActiveSupport::TestCase
       "description" => "Maybe an agent",
       "capabilities" => [],
       "reasoning" => "Uncertain classification"
-    })
-    AiAgentReviewer.expects(:new).returns(mock_reviewer)
+    }
+
+    # Create a fake reviewer that updates the agent like the real one
+    pending_agent = @pending_agent
+    fake_reviewer = Object.new
+    fake_reviewer.define_singleton_method(:review) do
+      pending_agent.update!(
+        ai_classification: review_result["classification"],
+        ai_confidence: review_result["confidence"],
+        ai_categories: review_result["categories"],
+        ai_description: review_result["description"],
+        ai_capabilities: review_result["capabilities"],
+        ai_reasoning: review_result["reasoning"],
+        ai_reviewed_at: Time.current,
+        is_agent: review_result["is_agent"]
+      )
+      review_result
+    end
+    AiAgentReviewer.stubs(:new).returns(fake_reviewer)
 
     AiAgentReviewJob.perform_now(@pending_agent.id)
 
