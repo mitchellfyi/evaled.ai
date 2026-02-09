@@ -47,9 +47,10 @@ Rails.application.configure do
   config.active_support.report_deprecations = false
 
   # Use Redis for caching when available, fallback to solid_cache_store
-  if ENV["REDIS_URL"].present?
+  redis_url = Rails.application.credentials.dig(:redis, :url) || ENV["REDIS_URL"]
+  if redis_url.present?
     config.cache_store = :redis_cache_store, {
-      url: ENV["REDIS_URL"],
+      url: redis_url,
       expires_in: 1.day,
       error_handler: ->(method:, returning:, exception:) {
         Rails.logger.error("Redis cache error: #{exception.class} - #{exception.message}")

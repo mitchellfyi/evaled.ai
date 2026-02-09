@@ -63,9 +63,10 @@ class GithubScraperJob < ApplicationJob
     request["Accept"] = "application/vnd.github.v3+json"
     request["User-Agent"] = "evaled.ai-scraper"
 
-    # Use GITHUB_TOKEN if available
-    if ENV["GITHUB_TOKEN"].present?
-      request["Authorization"] = "Bearer #{ENV['GITHUB_TOKEN']}"
+    # Use GitHub token from credentials (preferred) or ENV fallback
+    github_token = Rails.application.credentials.dig(:github, :token) || ENV["GITHUB_TOKEN"]
+    if github_token.present?
+      request["Authorization"] = "Bearer #{github_token}"
     end
 
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
