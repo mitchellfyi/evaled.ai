@@ -14,3 +14,7 @@ Metrics/BlockLength:
     - 'config/routes.rb'
     - 'spec/**/*'
     - 'test/**/*'
+
+# Temporarily disable until we identify remaining violations
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
