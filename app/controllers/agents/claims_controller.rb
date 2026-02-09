@@ -50,30 +50,12 @@ module Agents
       @agent = Agent.published.find_by!(slug: params[:agent_id])
     end
 
-    def authenticate_user!
-      redirect_to root_path, alert: "Please sign in to claim an agent." unless current_user
-    end
-
-    def current_user
-      # TODO: Implement proper authentication (Devise, etc.)
-      # For now, check session or return nil
-      return @current_user if defined?(@current_user)
-
-      @current_user = User.find_by(id: session[:user_id])
-    end
-
     def verify_github_ownership
-      # Verification methods:
-      # 1. Check if user's GitHub account matches the agent's repo owner
-      # 2. Verify user has push access to the repo
-      # 3. Check for verification file in repo (.evald-verify.txt)
-
       return { verified: false, reason: "No GitHub account linked" } unless current_user&.github_username
 
       github_repo = @agent.github_repo
       return { verified: false, reason: "No GitHub repo configured for this agent" } unless github_repo
 
-      # Check if user owns or has admin access to the repo
       if verify_repo_access(github_repo, current_user.github_username)
         {
           verified: true,
@@ -82,7 +64,7 @@ module Agents
           verified_at: Time.current.iso8601
         }
       else
-        { verified: false, reason: "You don't have admin access to #{github_repo}" }
+        { verified: false, reason: "You don't have write or admin access to #{github_repo}" }
       end
     end
 

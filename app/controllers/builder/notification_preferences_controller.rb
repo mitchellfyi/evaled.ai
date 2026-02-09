@@ -14,7 +14,7 @@ module Builder
       if @notification_preference.update(notification_params)
         redirect_to edit_builder_agent_path(@agent), notice: "Notification preferences updated."
       else
-        render :edit, status: :unprocessable_entity
+        render "builder/agents/edit", status: :unprocessable_entity
       end
     end
 

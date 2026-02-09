@@ -18,7 +18,7 @@ class ClaimProfileFlowTest < ActionDispatch::IntegrationTest
     get agent_path(@agent)
     assert_response :success
     assert_select "h3", text: /Are you the builder of #{@agent.name}/
-    assert_select "a", text: /Sign in with GitHub to Claim/
+    assert_select "a", text: /Sign in to Claim/
   end
 
   test "claimed agent show page does not display claim CTA" do
@@ -207,6 +207,23 @@ class ClaimProfileFlowTest < ActionDispatch::IntegrationTest
 
     user = User.from_omniauth(auth)
     assert_equal @user.id, user.id
+  end
+
+  test "User.from_omniauth links to existing user by email" do
+    existing = create(:user, email: "linked@example.com")
+    auth = OmniAuth::AuthHash.new(
+      uid: "888",
+      info: OmniAuth::AuthHash::InfoHash.new(
+        nickname: "linkeduser",
+        email: "linked@example.com",
+        name: "Linked User",
+        image: nil
+      )
+    )
+
+    user = User.from_omniauth(auth)
+    assert_equal existing.id, user.id
+    assert_equal "888", user.github_uid
   end
 
   # === Builder-editable fields shown on agent page ===

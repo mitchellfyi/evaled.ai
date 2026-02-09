@@ -22,14 +22,25 @@ class User < ApplicationRecord
   end
 
   def self.from_omniauth(auth)
-    where(github_uid: auth.uid.to_s).first_or_initialize.tap do |user|
-      user.github_uid = auth.uid.to_s
-      user.github_username = auth.info.nickname
-      user.email = auth.info.email || "#{auth.info.nickname}@github.example.com"
-      user.name = auth.info.name
-      user.avatar_url = auth.info.image
-      user.password = Devise.friendly_token[0, 20] if user.new_record?
-      user.save!
+    github_uid = auth.uid.to_s
+    email = auth.info.email || (auth.info.nickname && "#{auth.info.nickname}@github.example.com")
+
+    user = where(github_uid: github_uid).first_or_initialize
+
+    # Link GitHub identity to existing account with same email
+    if user.new_record? && email.present?
+      existing_user = find_by(email: email)
+      user = existing_user if existing_user
     end
+
+    user.github_uid = github_uid
+    user.github_username = auth.info.nickname
+    user.email = email if email.present?
+    user.name = auth.info.name
+    user.avatar_url = auth.info.image
+    user.password = Devise.friendly_token[0, 20] if user.new_record? && user.encrypted_password.blank?
+
+    user.save
+    user
   end
 end

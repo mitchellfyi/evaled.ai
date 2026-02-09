@@ -114,7 +114,7 @@
           <% if current_user %>
             <%= button_to "Claim This Profile", agent_claim_path(@agent), method: :post, class: "inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium" %>
           <% else %>
-            <%= link_to "Sign in with GitHub to Claim", user_github_omniauth_authorize_path, class: "inline-flex items-center px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 font-medium", data: { turbo: false } %>
+            <%= link_to "Sign in to Claim", new_user_session_path, class: "inline-flex items-center px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 font-medium" %>
           <% end %>
         </div>
       </div>
@@ -183,7 +183,7 @@
       <img src="<%= badge_agent_path(@agent, format: :svg) %>" alt="Evald Score" class="h-6">
     </div>
     <div class="bg-gray-50 rounded-lg p-4">
-      <code class="text-sm text-gray-700 break-all">[![Evald Score](https://evald.ai<%= badge_agent_path(@agent, format: :svg) %>)](https://evald.ai<%= agent_path(@agent) %>)</code>
+      <code class="text-sm text-gray-700 break-all">[![Evald Score](<%= badge_agent_url(@agent, format: :svg) %>)](<%= agent_url(@agent) %>)</code>
     </div>
   </div>
 
