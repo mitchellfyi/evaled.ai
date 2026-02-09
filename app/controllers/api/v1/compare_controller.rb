@@ -177,9 +177,11 @@ module Api
         return nil if agent_data.empty?
 
         # Prefer high confidence agents, then highest score
-        agent_data
-          .select { |a| a[:confidence] != "insufficient" }
-          .max_by { |a| [confidence_rank(a[:confidence]), a[:score]] }
+        # Fall back to any agent if all have insufficient confidence
+        preferred = agent_data.select { |a| a[:confidence] != "insufficient" }
+        candidates = preferred.any? ? preferred : agent_data
+
+        candidates.max_by { |a| [confidence_rank(a[:confidence]), a[:score]] }
       end
 
       def confidence_rank(level)
