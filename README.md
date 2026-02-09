@@ -181,11 +181,11 @@ Agent builders can **claim their profile** to add context, respond to findings, 
 
 ## Roadmap
 
-- [ ] Tier 0 \u2014 passive signal scoring from public repos
-- [ ] Tier 1 \u2014 automated task completion evals
-- [ ] Tier 2 \u2014 behavioral and safety evals (adversarial testing, prompt injection resistance, permission boundary testing)
-- [ ] Tier 3 \u2014 production telemetry integration (opt-in SDK for real-world performance data)
-- [ ] Tier 4 \u2014 security audits (penetration testing, compliance checks, paid certification)
-- [ ] Agent comparison and recommendation engine
-- [ ] CI/CD integration (block deploys below score threshold)
-- [ ] Badge embeds for READMEs (`![
+- [x] Tier 0 \u2014 passive signal scoring from public repos
+- [x] Tier 1 \u2014 automated task completion evals
+- [x] Tier 2 \u2014 behavioral and safety evals (adversarial testing, prompt injection resistance, permission boundary testing)
+- [x] Tier 3 \u2014 production telemetry integration (opt-in SDK for real-world performance data)
+- [x] Tier 4 \u2014 security audits (penetration testing, compliance checks, paid certification)
+- [x] Agent comparison and recommendation engine
+- [x] CI/CD integration (block deploys below score threshold)
+- [x] Badge embeds for READMEs (`![
