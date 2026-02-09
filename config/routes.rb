@@ -66,8 +66,14 @@ Rails.application.routes.draw do
   # Admin namespace with authentication
   namespace :admin do
     root to: "dashboard#index"
-    resources :users, only: [ :index, :show, :edit, :update, :destroy ]
-    resources :agents, only: [ :index, :show, :edit, :update, :destroy ]
-    resources :api_keys, only: [ :index, :destroy ]
+    resources :users, only: [:index, :show, :edit, :update, :destroy]
+    resources :agents, only: [:index, :show, :edit, :update, :destroy] do
+      member do
+        post :run_tier0
+        post :run_tier1
+        post :run_tier2
+      end
+    end
+    resources :api_keys, only: [:index, :destroy]
   end
 end

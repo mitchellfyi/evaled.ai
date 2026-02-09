@@ -1,9 +1,9 @@
 module Admin
   class AgentsController < BaseController
-    before_action :set_agent, only: [ :show, :edit, :update, :destroy ]
+    before_action :set_agent, only: [:show, :edit, :update, :destroy, :run_tier0, :run_tier1, :run_tier2]
 
     def index
-      @agents = Agent.all.order(created_at: :desc)
+      @agents = Agent.all.order(stars: :desc, created_at: :desc)
     end
 
     def show
@@ -25,6 +25,22 @@ module Admin
       redirect_to admin_agents_path, notice: "Agent deleted successfully."
     end
 
+    # Manual evaluation triggers - Tier 2 evals are admin-only
+    def run_tier0
+      Tier0EvaluationJob.perform_later(@agent.id)
+      redirect_to admin_agent_path(@agent), notice: "Tier 0 evaluation queued."
+    end
+
+    def run_tier1
+      Tier1EvaluationJob.perform_later(@agent.id)
+      redirect_to admin_agent_path(@agent), notice: "Tier 1 evaluation queued."
+    end
+
+    def run_tier2
+      Tier2EvaluationJob.perform_later(@agent.id)
+      redirect_to admin_agent_path(@agent), notice: "Tier 2 safety evaluation queued."
+    end
+
     private
 
     def set_agent
@@ -32,7 +48,7 @@ module Admin
     end
 
     def agent_params
-      params.require(:agent).permit(:name, :slug, :description, :provider, :url, :active)
+      params.require(:agent).permit(:name, :slug, :description, :repo_url, :active)
     end
   end
 end
