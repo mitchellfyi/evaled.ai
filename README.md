@@ -207,9 +207,20 @@ Set `EVALD_API_URL` and `EVALD_API_KEY` as environment variables.
 ```bash
 POST https://evald.ai/api/v1/mcp
 Content-Type: application/json
+Authorization: Bearer your-api-key
 
 {"jsonrpc": "2.0", "id": 1, "method": "tools/list"}
 ```
+
+### Authentication
+
+An API key is required for authenticated access. Generate one from your Evald account:
+
+1. Sign in at [evald.ai](https://evald.ai)
+2. Go to your account settings → **API Keys**
+3. Create a new key and copy the token
+
+Use the token as your `EVALD_API_KEY` in MCP client configs, or pass it as a `Bearer` token in the `Authorization` header for HTTP requests.
 
 ### Claude Desktop Configuration
 
@@ -223,7 +234,7 @@ Add to your `claude_desktop_config.json`:
       "args": ["evald-mcp-server"],
       "env": {
         "EVALD_API_URL": "https://evald.ai",
-        "EVALD_API_KEY": "your-api-key"
+        "EVALD_API_KEY": "evald_a1b2c3d4e5f6..."
       }
     }
   }
@@ -242,7 +253,7 @@ Add to Cursor MCP settings:
       "args": ["evald-mcp-server"],
       "env": {
         "EVALD_API_URL": "https://evald.ai",
-        "EVALD_API_KEY": "your-api-key"
+        "EVALD_API_KEY": "evald_a1b2c3d4e5f6..."
       }
     }
   }
