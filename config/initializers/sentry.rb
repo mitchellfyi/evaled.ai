@@ -1,7 +1,7 @@
 Sentry.init do |config|
-  config.dsn = ENV["SENTRY_DSN"]
+  config.dsn = Rails.application.credentials.dig(:sentry, :dsn)
   config.breadcrumbs_logger = [ :active_support_logger, :http_logger ]
-  config.traces_sample_rate = ENV.fetch("SENTRY_TRACES_SAMPLE_RATE", 0.1).to_f
+  config.traces_sample_rate = Rails.application.credentials.dig(:sentry, :traces_sample_rate) || 0.1
   config.enabled_environments = %w[production staging]
 
   config.excluded_exceptions += [

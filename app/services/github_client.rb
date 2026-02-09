@@ -1,7 +1,7 @@
 class GithubClient
   BASE_URL = "https://api.github.com"
 
-  def initialize(token: ENV["GITHUB_TOKEN"])
+  def initialize(token: Rails.application.credentials.dig(:github, :token) || ENV["GITHUB_TOKEN"])
     @token = token
   end
 

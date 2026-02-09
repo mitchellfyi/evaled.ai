@@ -29,3 +29,8 @@ module ActiveSupport
     include FactoryBot::Syntax::Methods
   end
 end
+
+class ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+  include FactoryBot::Syntax::Methods
+end
