@@ -1,0 +1,10 @@
+{
+  "ignored_warnings": [
+    {
+      "fingerprint": "715ee6d743a8af33c7b930d728708ce19c765fb40e2ad9d2b974db04d92dc7d1",
+      "note": "Ruby upgrade planned before EOL - tracking separately"
+    }
+  ],
+  "updated": "2026-02-09",
+  "brakeman_version": "8.0.2"
+}

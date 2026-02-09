@@ -3,5 +3,6 @@ require "rubygems"
 require "bundler/setup"
 
 ARGV.unshift("--ensure-latest")
+ARGV.unshift("-i", "config/brakeman.ignore") if File.exist?("config/brakeman.ignore")
 
 load Gem.bin_path("brakeman", "brakeman")
