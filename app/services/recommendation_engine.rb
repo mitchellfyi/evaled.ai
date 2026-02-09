@@ -22,10 +22,10 @@ class RecommendationEngine
   def find_similar_agents(agent, limit: 5)
     return [] if agent.nil?
 
-    # Find agents with overlapping categories and similar scores
+    # Find agents in the same category with similar scores
     similar = Agent.published
                    .where.not(id: agent.id)
-                   .where("categories && ARRAY[?]::varchar[]", agent.categories.to_a)
+                   .where(category: agent.category)
                    .order(Arel.sql("ABS(score - #{agent.score.to_i})"))
                    .limit(limit)
 
@@ -38,25 +38,21 @@ class RecommendationEngine
     {
       slug: agent.slug,
       name: agent.name,
-      provider: agent.provider,
       score: agent.score,
       tier: agent.tier,
       match_reason: "Top performer for #{capability}",
-      categories: agent.categories
+      category: agent.category
     }
   end
 
   def similarity_data(similar_agent, reference_agent)
-    shared = (similar_agent.categories.to_a & reference_agent.categories.to_a)
-
     {
       slug: similar_agent.slug,
       name: similar_agent.name,
-      provider: similar_agent.provider,
       score: similar_agent.score,
       tier: similar_agent.tier,
-      shared_categories: shared,
-      score_difference: (similar_agent.score - reference_agent.score).round(1)
+      shared_category: similar_agent.category,
+      score_difference: (similar_agent.score.to_f - reference_agent.score.to_f).round(1)
     }
   end
 end
