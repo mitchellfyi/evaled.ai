@@ -9,6 +9,9 @@ module Tier0
       @agent = create(:agent, repo_url: "https://github.com/testowner/testrepo")
       WebMock.enable!
       Rails.cache.clear
+      @users_stubbed = false
+      @stargazer_quality = nil
+      @fork_quality = nil
     end
 
     teardown do
@@ -187,6 +190,9 @@ module Tier0
     end
 
     def stub_github_stargazers(count: 10, quality: :high, burst: false)
+      # Store quality for user endpoint stub
+      @stargazer_quality = quality
+
       stargazers = count.times.map do |i|
         user = generate_user(i, quality)
         starred_at = burst ? (Time.current - rand(1..3).days).iso8601 : (Time.current - rand(1..365).days).iso8601
@@ -199,9 +205,15 @@ module Tier0
           body: stargazers.to_json,
           headers: { "Content-Type" => "application/json" }
         )
+
+      # Set up user endpoint stub if not already done
+      stub_github_users unless @users_stubbed
     end
 
     def stub_github_forks(count: 5, quality: :high)
+      # Store quality for user endpoint stub
+      @fork_quality = quality
+
       forks = count.times.map do |i|
         {
           "id" => 1000 + i,
@@ -216,6 +228,42 @@ module Tier0
           body: forks.to_json,
           headers: { "Content-Type" => "application/json" }
         )
+
+      # Set up user endpoint stub if not already done
+      stub_github_users unless @users_stubbed
+    end
+
+    def stub_github_users
+      @users_stubbed = true
+
+      # Stub user endpoint with dynamic response based on username
+      stub_request(:get, %r{api.github.com/users/})
+        .to_return do |request|
+          # Extract username from URL
+          username = request.uri.path.split("/").last
+
+          # Determine quality based on username prefix
+          quality = if username.start_with?("developer")
+                      @stargazer_quality || :high
+                    elsif username.start_with?("user")
+                      @stargazer_quality || :low
+                    elsif username.start_with?("newuser")
+                      :new_accounts
+                    elsif username.start_with?("fork")
+                      @fork_quality || :high
+                    else
+                      :high
+                    end
+
+          # Generate consistent user data based on username
+          index = username.match(/\d+/)&.to_s.to_i
+          user = generate_user(index, quality)
+          {
+            status: 200,
+            body: user.to_json,
+            headers: { "Content-Type" => "application/json" }
+          }
+        end
     end
 
     def generate_user(index, quality)
