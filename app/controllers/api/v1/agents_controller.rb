@@ -52,7 +52,9 @@ module Api
 
         # Order by domain score if domain filter provided
         if params[:domain].present? && Agent::DOMAINS.include?(params[:domain])
-          agents = agents.order(Arel.sql("#{params[:domain]}_score DESC NULLS LAST"))
+          # Safe: domain validated against DOMAINS constant whitelist
+          domain_column = Agent::DOMAIN_SCORE_COLUMNS[params[:domain]]
+          agents = agents.order(Arel.sql("#{domain_column} DESC NULLS LAST"))
         else
           agents = agents.order(score: :desc)
         end

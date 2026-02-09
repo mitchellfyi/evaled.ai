@@ -33,6 +33,8 @@ class Agent < ApplicationRecord
   CLAIM_STATUSES = %w[ unclaimed claimed verified ].freeze
   DECAY_RATES = %w[ standard slow fast ].freeze
   DOMAINS = %w[ coding research workflow ].freeze # Evaluatable domains
+  # Safe mapping of domains to column names for SQL ordering
+  DOMAIN_SCORE_COLUMNS = DOMAINS.index_with { |d| "#{d}_score" }.freeze
 
   # Tier 0 signal weights
   TIER0_WEIGHTS = {
