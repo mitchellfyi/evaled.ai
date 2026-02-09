@@ -5,6 +5,9 @@ class Agent < ApplicationRecord
   has_many :certifications, dependent: :destroy
   has_many :security_scans, dependent: :destroy
   has_many :safety_scores, dependent: :destroy
+  has_many :agent_claims, dependent: :destroy
+  has_many :security_audits, dependent: :destroy
+  has_many :security_certifications, dependent: :destroy
   belongs_to :claimed_by_user, class_name: "User", optional: true
 
   validates :name, presence: true
@@ -140,12 +143,32 @@ class Agent < ApplicationRecord
     claim_status == "verified"
   end
 
+  def owner
+    agent_claims.active.first&.user
+  end
+
+  def owned_by?(user)
+    agent_claims.active.exists?(user: user)
+  end
+
   def current_tier0_score
     agent_scores.tier0.current.latest.first
   end
 
   def current_safety_score
     safety_scores.latest.first
+  end
+
+  def latest_audit
+    security_audits.order(audit_date: :desc).first
+  end
+
+  def active_certifications
+    security_certifications.active
+  end
+
+  def certification_level(type)
+    security_certifications.active.by_type(type).order(:level).last&.level
   end
 
   private

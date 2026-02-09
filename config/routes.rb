@@ -53,6 +53,13 @@ Rails.application.routes.draw do
           post :check
         end
       end
+
+      # Agent claiming
+      resources :claims, only: [:create] do
+        member do
+          post :verify
+        end
+      end
     end
   end
 
