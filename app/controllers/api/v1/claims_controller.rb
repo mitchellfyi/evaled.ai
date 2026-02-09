@@ -14,7 +14,7 @@ module Api
         )
 
         render json: {
-          claim: claim.as_json(only: [:id, :verification_method, :status]),
+          claim: claim.as_json(only: [ :id, :verification_method, :status ]),
           verification_instructions: verification_instructions(claim)
         }, status: :created
       end

@@ -6,11 +6,11 @@ class ClaimVerificationService
 
   def verify
     result = case @claim.verification_method
-             when "dns_txt" then verify_dns
-             when "github_file" then verify_github
-             when "api_key" then verify_api_key
-             else false
-             end
+    when "dns_txt" then verify_dns
+    when "github_file" then verify_github
+    when "api_key" then verify_api_key
+    else false
+    end
 
     result ? @claim.verify! : @claim
   end
@@ -65,6 +65,6 @@ class ClaimVerificationService
   def parse_github_url(url)
     match = url.match(%r{github\.com/([^/]+)/([^/]+)})
     return nil unless match
-    [match[1], match[2].sub(/\.git$/, "")]
+    [ match[1], match[2].sub(/\.git$/, "") ]
   end
 end
