@@ -1,16 +1,17 @@
 # frozen_string_literal: true
 class AgentsController < ApplicationController
   def index
-    @agents = Agent.published.order(score: :desc)
+    agents = Agent.published.order(score: :desc)
 
     if params[:category].present?
-      @agents = @agents.by_category(params[:category])
+      agents = agents.by_category(params[:category])
     end
 
     if params[:min_score].present?
-      @agents = @agents.high_score(params[:min_score].to_i)
+      agents = agents.high_score(params[:min_score].to_i)
     end
 
+    @pagy, @agents = pagy(agents)
     @featured_agents = Agent.published.featured.order(score: :desc).limit(6)
     @categories = Agent::CATEGORIES
   end
