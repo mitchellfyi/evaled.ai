@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Agent < ApplicationRecord
   has_many :evaluations, dependent: :destroy
+  has_many :eval_runs, dependent: :destroy
   has_many :agent_scores, dependent: :destroy
   has_many :agent_telemetry_stats, dependent: :destroy
   has_many :certifications, dependent: :destroy
@@ -206,6 +207,64 @@ class Agent < ApplicationRecord
 
   def certification_level(type)
     security_certifications.active.by_type(type).order(:level).last&.level
+  end
+
+  CONFIDENCE_LEVELS = %w[ insufficient low medium high ].freeze
+
+  # Compute confidence level based on data availability and recency
+  def confidence_level
+    confidence_factors[:level]
+  end
+
+  # Detailed breakdown of confidence calculation
+  def confidence_factors
+    has_tier0 = tier0_summary.values.any? { |v| v.present? && v > 0 }
+    has_tier1 = tier1_summary.values.any? { |v| v.present? && v > 0 }
+    tier1_complete = has_tier1 && tier1_summary.size == TIER1_WEIGHTS.size
+
+    completed_evals = evaluations.completed
+    tier0_evals = completed_evals.by_tier("tier0")
+    tier1_evals = completed_evals.by_tier("tier1")
+    tier1_run_count = tier1_evals.count
+
+    recent_cutoff = 30.days.ago
+    recent_eval = last_verified_at.present? && last_verified_at > recent_cutoff
+
+    eval_task_categories = eval_runs.completed
+      .joins(:eval_task)
+      .distinct
+      .pluck("eval_tasks.category")
+      .compact
+    breadth = eval_task_categories.size
+
+    tier1_scores = tier1_evals.where.not(score: nil).pluck(:score).map(&:to_f)
+    low_variance = if tier1_scores.size >= 2
+      mean = tier1_scores.sum / tier1_scores.size
+      variance = tier1_scores.sum { |s| (s - mean)**2 } / tier1_scores.size
+      variance < 100 # standard deviation < 10 points
+    else
+      false
+    end
+
+    level = if has_tier0 && tier1_complete && tier1_run_count >= 2 && recent_eval
+              "high"
+            elsif has_tier0 && (has_tier1 || tier0_evals.where("created_at > ?", 60.days.ago).any?)
+              "medium"
+            elsif has_tier0
+              "low"
+            else
+              "insufficient"
+            end
+
+    {
+      level: level,
+      has_tier0: has_tier0,
+      has_tier1: has_tier1,
+      tier1_run_count: tier1_run_count,
+      recent_eval: recent_eval,
+      eval_breadth: breadth,
+      low_variance: low_variance
+    }
   end
 
   private

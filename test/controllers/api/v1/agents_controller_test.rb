@@ -79,6 +79,7 @@ class Api::V1::AgentsControllerTest < ActionDispatch::IntegrationTest
     assert first_agent.key?("name"), "Should have 'name'"
     assert first_agent.key?("category"), "Should have 'category'"
     assert first_agent.key?("score"), "Should have 'score'"
+    assert first_agent.key?("confidence"), "Should have 'confidence'"
     assert first_agent.key?("last_verified"), "Should have 'last_verified'"
   end
 
@@ -98,6 +99,8 @@ class Api::V1::AgentsControllerTest < ActionDispatch::IntegrationTest
     assert json.key?("description")
     assert json.key?("builder")
     assert json.key?("score")
+    assert json.key?("confidence")
+    assert_includes Agent::CONFIDENCE_LEVELS, json["confidence"]
     assert json.key?("tier0")
     assert json.key?("tier1")
   end
@@ -139,6 +142,8 @@ class Api::V1::AgentsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal "alpha-agent", json["agent"]
     assert json.key?("score")
+    assert json.key?("confidence")
+    assert_includes Agent::CONFIDENCE_LEVELS, json["confidence"]
     assert json.key?("tier0")
     assert json.key?("tier1")
     assert json.key?("last_verified")
