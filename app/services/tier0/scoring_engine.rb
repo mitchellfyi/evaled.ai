@@ -1,0 +1,44 @@
+module Tier0
+  class ScoringEngine
+    WEIGHTS = {
+      repo_health: 0.30,
+      bus_factor: 0.20,
+      dependency_risk: 0.25,
+      documentation: 0.25
+    }.freeze
+
+    EXPIRY_DAYS = 30
+
+    def initialize(agent)
+      @agent = agent
+    end
+
+    def evaluate
+      breakdown = {
+        repo_health: RepoHealthAnalyzer.new(@agent).analyze,
+        bus_factor: BusFactorAnalyzer.new(@agent).analyze,
+        dependency_risk: DependencyRiskAnalyzer.new(@agent).analyze,
+        documentation: DocumentationAnalyzer.new(@agent).analyze
+      }
+
+      overall = calculate_weighted_score(breakdown)
+
+      AgentScore.create!(
+        agent: @agent,
+        tier: 0,
+        overall_score: overall,
+        breakdown: breakdown,
+        evaluated_at: Time.current,
+        expires_at: EXPIRY_DAYS.days.from_now
+      )
+    end
+
+    private
+
+    def calculate_weighted_score(breakdown)
+      WEIGHTS.sum do |key, weight|
+        (breakdown.dig(key, :score) || 0) * weight
+      end.round
+    end
+  end
+end

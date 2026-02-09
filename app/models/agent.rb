@@ -1,5 +1,6 @@
 class Agent < ApplicationRecord
   has_many :evaluations, dependent: :destroy
+  has_many :agent_scores, dependent: :destroy
   belongs_to :claimed_by_user, class_name: "User", optional: true
 
   validates :name, presence: true
@@ -133,6 +134,10 @@ class Agent < ApplicationRecord
 
   def verified?
     claim_status == "verified"
+  end
+
+  def current_tier0_score
+    agent_scores.tier0.current.latest.first
   end
 
   private
