@@ -35,6 +35,17 @@ FactoryBot.define do
       last_verified_at { 1.day.ago }
     end
 
+    trait :with_domain_scores do
+      coding_score { 85.0 }
+      coding_evals_count { 5 }
+      research_score { 70.0 }
+      research_evals_count { 3 }
+      workflow_score { nil }
+      workflow_evals_count { 0 }
+      target_domains { %w[coding research] }
+      primary_domain { "coding" }
+    end
+
     trait :with_api do
       api_endpoint { "https://api.example.com/agent" }
       api_key { "test-api-key-123" }
