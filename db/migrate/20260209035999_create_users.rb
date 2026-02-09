@@ -7,10 +7,10 @@ class CreateUsers < ActiveRecord::Migration[8.0]
       t.string :github_uid
       t.string :avatar_url
       t.boolean :admin, default: false
-      
+
       t.timestamps
     end
-    
+
     add_index :users, :email, unique: true
     add_index :users, :github_uid, unique: true
   end

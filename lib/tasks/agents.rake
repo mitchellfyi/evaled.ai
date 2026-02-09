@@ -2,11 +2,11 @@ namespace :agents do
   desc "Seed agents from GitHub"
   task seed: :environment do
     puts "Starting GitHub agent scrape..."
-    
+
     search_terms = [
       "ai agent",
       "llm agent",
-      "autonomous agent", 
+      "autonomous agent",
       "agentic",
       "mcp server",
       "langchain agent",
@@ -15,16 +15,16 @@ namespace :agents do
       "crewai",
       "agent framework"
     ]
-    
+
     search_terms.each do |term|
       puts "Searching: #{term}"
       GithubScraperJob.perform_now(term)
       sleep 2  # Rate limit
     end
-    
+
     puts "Done! Total agents: #{Agent.count}"
   end
-  
+
   desc "Show agent stats"
   task stats: :environment do
     puts "Total agents: #{Agent.count}"

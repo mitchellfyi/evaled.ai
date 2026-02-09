@@ -12,9 +12,9 @@ Rails.application.routes.draw do
   get "methodology", to: "pages#methodology"
 
   # Agent pages (SEO-friendly)
-  resources :agents, only: [:index, :show], path: 'agents' do
+  resources :agents, only: [ :index, :show ], path: "agents" do
     member do
-      get :badge, to: 'badges#show', defaults: { format: :svg }
+      get :badge, to: "badges#show", defaults: { format: :svg }
     end
   end
   get "compare", to: "agents#compare"
@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   # API v1
   namespace :api do
     namespace :v1 do
-      resources :agents, only: [:index, :show] do
+      resources :agents, only: [ :index, :show ] do
         member do
           get :score
         end
@@ -36,9 +36,9 @@ Rails.application.routes.draw do
 
   # Admin namespace with authentication
   namespace :admin do
-    root to: 'dashboard#index'
-    resources :users, only: [:index, :show, :edit, :update, :destroy]
-    resources :agents, only: [:index, :show, :edit, :update, :destroy]
-    resources :api_keys, only: [:index, :destroy]
+    root to: "dashboard#index"
+    resources :users, only: [ :index, :show, :edit, :update, :destroy ]
+    resources :agents, only: [ :index, :show, :edit, :update, :destroy ]
+    resources :api_keys, only: [ :index, :destroy ]
   end
 end

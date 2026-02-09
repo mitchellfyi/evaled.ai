@@ -3,12 +3,12 @@ module Api
     class AgentsController < BaseController
       def index
         agents = Agent.published.order(score: :desc)
-        
+
         agents = agents.by_category(params[:capability]) if params[:capability].present?
         agents = agents.high_score(params[:min_score].to_i) if params[:min_score].present?
-        
+
         agents = agents.limit(params[:limit] || 50)
-        
+
         render json: agents.map { |a| agent_summary(a) }
       end
 
@@ -23,9 +23,9 @@ module Api
       end
 
       def compare
-        slugs = params[:agents].to_s.split(',').map(&:strip).first(5)
+        slugs = params[:agents].to_s.split(",").map(&:strip).first(5)
         agents = Agent.published.where(slug: slugs)
-        
+
         render json: {
           task: params[:task],
           agents: agents.map { |a| agent_detail(a) },
@@ -35,15 +35,15 @@ module Api
 
       def search
         agents = Agent.published
-        
+
         agents = agents.by_category(params[:capability]) if params[:capability].present?
         agents = agents.high_score(params[:min_score].to_i) if params[:min_score].present?
-        
+
         if params[:q].present?
-          agents = agents.where('name ILIKE ? OR description ILIKE ?', 
+          agents = agents.where("name ILIKE ? OR description ILIKE ?",
                                 "%#{params[:q]}%", "%#{params[:q]}%")
         end
-        
+
         render json: agents.limit(20).map { |a| agent_summary(a) }
       end
 
@@ -95,7 +95,7 @@ module Api
         # Simple recommendation based on score and category match
         best = agents.max_by { |a| a.decayed_score || 0 }
         return nil unless best
-        
+
         {
           recommended: best.slug,
           reason: "Highest Evaled Score (#{best.decayed_score}) among compared agents"

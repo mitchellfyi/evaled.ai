@@ -1,6 +1,6 @@
 module Admin
   class AgentsController < BaseController
-    before_action :set_agent, only: [:show, :edit, :update, :destroy]
+    before_action :set_agent, only: [ :show, :edit, :update, :destroy ]
 
     def index
       @agents = Agent.all.order(created_at: :desc)

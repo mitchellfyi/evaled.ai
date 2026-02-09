@@ -1,6 +1,6 @@
 class Agent < ApplicationRecord
   has_many :evaluations, dependent: :destroy
-  belongs_to :claimed_by_user, class_name: 'User', optional: true
+  belongs_to :claimed_by_user, class_name: "User", optional: true
 
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[a-z0-9-]+\z/ }
@@ -10,8 +10,8 @@ class Agent < ApplicationRecord
   scope :published, -> { where(published: true) }
   scope :featured, -> { where(featured: true) }
   scope :by_category, ->(cat) { where(category: cat) }
-  scope :high_score, ->(min = 80) { where('score >= ?', min) }
-  scope :recently_verified, -> { where('last_verified_at > ?', 30.days.ago) }
+  scope :high_score, ->(min = 80) { where("score >= ?", min) }
+  scope :recently_verified, -> { where("last_verified_at > ?", 30.days.ago) }
 
   CATEGORIES = %w[coding research workflow assistant general].freeze
   CLAIM_STATUSES = %w[unclaimed claimed verified].freeze
@@ -82,12 +82,12 @@ class Agent < ApplicationRecord
 
     days_since_eval = (Time.current - last_verified_at) / 1.day
     decay_factor = case decay_rate
-                   when 'slow' then 0.001
-                   when 'fast' then 0.005
-                   else 0.002 # standard
-                   end
+    when "slow" then 0.001
+    when "fast" then 0.005
+    else 0.002 # standard
+    end
 
-    [score_at_eval - (days_since_eval * decay_factor * score_at_eval), 0].max.round(2)
+    [ score_at_eval - (days_since_eval * decay_factor * score_at_eval), 0 ].max.round(2)
   end
 
   def tier0_summary
@@ -115,24 +115,24 @@ class Agent < ApplicationRecord
   end
 
   def badge_color
-    return 'gray' unless score
+    return "gray" unless score
 
     case score
-    when 90..100 then 'brightgreen'
-    when 80..89 then 'green'
-    when 70..79 then 'yellowgreen'
-    when 60..69 then 'yellow'
-    when 50..59 then 'orange'
-    else 'red'
+    when 90..100 then "brightgreen"
+    when 80..89 then "green"
+    when 70..79 then "yellowgreen"
+    when 60..69 then "yellow"
+    when 50..59 then "orange"
+    else "red"
     end
   end
 
   def claimed?
-    claim_status != 'unclaimed'
+    claim_status != "unclaimed"
   end
 
   def verified?
-    claim_status == 'verified'
+    claim_status == "verified"
   end
 
   private
