@@ -33,7 +33,7 @@ EvalTask.find_or_create_by!(name: "Multi-Step Process") do |t|
   t.difficulty = "medium"
   t.description = "Complete a multi-step workflow"
   t.prompt = "Process a customer refund: verify order, check eligibility, process refund, send confirmation"
-  t.expected_output = { 
+  t.expected_output = {
     "steps" => [
       { "name" => "verify_order" },
       { "name" => "check_eligibility" },

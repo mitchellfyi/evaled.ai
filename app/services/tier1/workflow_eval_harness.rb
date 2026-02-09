@@ -4,16 +4,16 @@ module Tier1
       @agent = agent
       @eval_task = eval_task
     end
-    
+
     def run
       eval_run = create_eval_run
-      
+
       begin
         eval_run.update!(status: "running", started_at: Time.current)
-        
+
         result = execute_workflow
         metrics = calculate_metrics(result)
-        
+
         eval_run.update!(
           status: "completed",
           agent_output: result[:output],
@@ -29,12 +29,12 @@ module Tier1
           completed_at: Time.current
         )
       end
-      
+
       eval_run
     end
-    
+
     private
-    
+
     def create_eval_run
       EvalRun.create!(
         agent: @agent,
@@ -42,17 +42,17 @@ module Tier1
         status: "pending"
       )
     end
-    
+
     def execute_workflow
       steps = @eval_task.expected_output&.dig("steps") || []
       start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-      
+
       step_results = steps.map.with_index do |step, i|
         execute_step(step, i)
       end
-      
+
       end_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-      
+
       {
         output: step_results.to_json,
         step_results: step_results,
@@ -60,7 +60,7 @@ module Tier1
         duration_ms: ((end_time - start_time) * 1000).round
       }
     end
-    
+
     def execute_step(step, index)
       # Simulate step execution
       {
@@ -73,17 +73,17 @@ module Tier1
         tokens: rand(100..500)
       }
     end
-    
+
     def calculate_metrics(result)
       steps = result[:step_results] || []
       return { passed: false, completion_rate: 0 } if steps.empty?
-      
+
       successful = steps.count { |s| s[:success] }
       violations = steps.count { |s| s[:scope_violation] }
       escalations = steps.count { |s| s[:escalated] }
       recoveries = steps.count { |s| s[:recovered] }
       failures = steps.count { |s| !s[:success] }
-      
+
       {
         passed: successful == steps.count,
         completion_rate: successful.to_f / steps.count,
@@ -93,7 +93,7 @@ module Tier1
         error_recovery_rate: failures > 0 ? recoveries.to_f / failures : 1.0
       }
     end
-    
+
     def check_escalation_appropriateness(steps)
       # Escalation should happen on complex failures
       true  # Placeholder
