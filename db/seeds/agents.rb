@@ -113,3 +113,69 @@ end
 
 # Run the seeder
 GithubAgentSeeder.new.seed
+
+# Add specific high-value open-source AI agents
+# These are manually curated agents that should be in the database
+puts "\nSeeding manually curated agents..."
+
+CURATED_AGENTS = [
+  {
+    name: "Skyvern",
+    github_url: "https://github.com/skyvern-ai/skyvern",
+    description: "Browser automation agent that navigates websites and completes tasks autonomously using LLMs and computer vision"
+  },
+  {
+    name: "CUA",
+    github_url: "https://github.com/trycua/cua",
+    description: "Computer-Use Agent that runs workflows on Apple Silicon macOS with autonomous desktop control"
+  },
+  {
+    name: "Deep Research",
+    github_url: "https://github.com/ozamatash/deep-research-mcp",
+    description: "Performs iterative deep research using search engines, web scraping, and LLMs to generate comprehensive reports"
+  },
+  {
+    name: "ManusMCP",
+    github_url: "https://github.com/mantrakp04/manusmcp",
+    description: "Orchestrates specialized agents for collaborative task execution with file operations and browser automation"
+  },
+  {
+    name: "DesktopCommander",
+    github_url: "https://github.com/wonderwhy-er/DesktopCommanderMCP",
+    description: "Executes terminal commands and edits files autonomously on your computer"
+  },
+  {
+    name: "Inbox Zero",
+    github_url: "https://github.com/elie222/inbox-zero",
+    description: "AI personal assistant for autonomous email management, triage, and response"
+  },
+  {
+    name: "Browserbase",
+    github_url: "https://github.com/browserbase/mcp-server-browserbase",
+    description: "Automates web browsers remotely in cloud environments for headless browser automation"
+  },
+  {
+    name: "Activepieces",
+    github_url: "https://github.com/activepieces/activepieces",
+    description: "Open-source workflow automation platform with AI-powered flows and 200+ integrations"
+  }
+].freeze
+
+CURATED_AGENTS.each do |agent_data|
+  begin
+    Agent.find_or_create_by!(repo_url: agent_data[:github_url]) do |agent|
+      agent.name = agent_data[:name]
+      agent.description = agent_data[:description]
+      
+      # Extract owner from github_url
+      owner_match = agent_data[:github_url].match(%r{github\.com/([^/]+)/})
+      agent.owner = owner_match[1] if owner_match
+      
+      puts "  ✓ Added #{agent_data[:name]}"
+    end
+  rescue ActiveRecord::RecordInvalid => e
+    puts "  ⚠ Skipping #{agent_data[:name]}: #{e.message}"
+  end
+end
+
+puts "Curated agents seeding complete."
