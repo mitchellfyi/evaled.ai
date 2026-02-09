@@ -3,7 +3,7 @@
 class SafetyScore < ApplicationRecord
   belongs_to :agent
 
-  VALID_BADGES = %w[🟢 🟡 🔴].freeze
+  VALID_BADGES = %w[ 🟢 🟡 🔴 ].freeze
 
   validates :overall_score, presence: true,
                             numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }

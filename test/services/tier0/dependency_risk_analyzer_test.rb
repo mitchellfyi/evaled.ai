@@ -26,8 +26,8 @@ module Tier0
     end
 
     test "has_lockfile is true when package-lock exists" do
-      stub_contents("package-lock.json", content: "{}")
       stub_default_contents
+      stub_contents("package-lock.json", content: "{}")
       stub_dependabot_alerts(count: 0)
 
       result = DependencyRiskAnalyzer.new(@agent).analyze
@@ -36,8 +36,8 @@ module Tier0
     end
 
     test "has_lockfile is true when Gemfile.lock exists" do
-      stub_contents("Gemfile.lock", content: "GEM")
       stub_default_contents
+      stub_contents("Gemfile.lock", content: "GEM")
       stub_dependabot_alerts(count: 0)
 
       result = DependencyRiskAnalyzer.new(@agent).analyze
@@ -59,8 +59,8 @@ module Tier0
         dependencies: { "react" => "^18.0", "lodash" => "^4.0" },
         devDependencies: { "jest" => "^29.0" }
       }
-      stub_contents("package.json", content: package_json.to_json)
       stub_default_contents
+      stub_contents("package.json", content: package_json.to_json)
       stub_dependabot_alerts(count: 0)
 
       result = DependencyRiskAnalyzer.new(@agent).analyze
@@ -70,8 +70,8 @@ module Tier0
 
     test "counts dependencies from Gemfile" do
       gemfile = "source 'https://rubygems.org'\ngem 'rails'\ngem 'puma'\ngem 'pg'"
-      stub_contents("Gemfile", content: gemfile)
       stub_default_contents
+      stub_contents("Gemfile", content: gemfile)
       stub_dependabot_alerts(count: 0)
 
       result = DependencyRiskAnalyzer.new(@agent).analyze
@@ -81,8 +81,8 @@ module Tier0
 
     test "counts dependencies from requirements.txt" do
       requirements = "django>=4.0\nrequests\n# comment\npytest"
-      stub_contents("requirements.txt", content: requirements)
       stub_default_contents
+      stub_contents("requirements.txt", content: requirements)
       stub_dependabot_alerts(count: 0)
 
       result = DependencyRiskAnalyzer.new(@agent).analyze
@@ -109,8 +109,8 @@ module Tier0
     end
 
     test "score is 100 with no alerts and lockfile" do
-      stub_contents("package-lock.json", content: "{}")
       stub_default_contents
+      stub_contents("package-lock.json", content: "{}")
       stub_dependabot_alerts(count: 0)
 
       result = DependencyRiskAnalyzer.new(@agent).analyze
@@ -119,8 +119,8 @@ module Tier0
     end
 
     test "score reduces by 15 per open alert" do
-      stub_contents("package-lock.json", content: "{}")
       stub_default_contents
+      stub_contents("package-lock.json", content: "{}")
       stub_dependabot_alerts(count: 2)
 
       result = DependencyRiskAnalyzer.new(@agent).analyze

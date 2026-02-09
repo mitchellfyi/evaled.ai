@@ -2,8 +2,8 @@ class AgentClaim < ApplicationRecord
   belongs_to :agent
   belongs_to :user
 
-  VERIFICATION_METHODS = %w[dns_txt github_file api_key].freeze
-  STATUSES = %w[pending verified rejected expired].freeze
+  VERIFICATION_METHODS = %w[ dns_txt github_file api_key ].freeze
+  STATUSES = %w[ pending verified rejected expired ].freeze
 
   validates :verification_method, presence: true, inclusion: { in: VERIFICATION_METHODS }
   validates :status, presence: true, inclusion: { in: STATUSES }

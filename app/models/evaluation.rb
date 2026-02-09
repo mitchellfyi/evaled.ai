@@ -1,8 +1,8 @@
 class Evaluation < ApplicationRecord
   belongs_to :agent
 
-  validates :tier, presence: true, inclusion: { in: %w[tier0 tier1 tier2] }
-  validates :status, inclusion: { in: %w[pending running completed failed] }
+  validates :tier, presence: true, inclusion: { in: %w[ tier0 tier1 tier2 ] }
+  validates :status, inclusion: { in: %w[ pending running completed failed ] }
 
   scope :completed, -> { where(status: "completed") }
   scope :by_tier, ->(tier) { where(tier: tier) }

@@ -3,8 +3,8 @@
 class SecurityScan < ApplicationRecord
   belongs_to :agent
 
-  SCAN_TYPES = %w[full dependencies code secrets container].freeze
-  SEVERITIES = %w[critical high medium low unknown].freeze
+  SCAN_TYPES = %w[ full dependencies code secrets container ].freeze
+  SEVERITIES = %w[ critical high medium low unknown ].freeze
 
   validates :scan_type, presence: true, inclusion: { in: SCAN_TYPES }
   validates :scanned_at, presence: true

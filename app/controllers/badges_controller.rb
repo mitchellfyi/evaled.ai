@@ -3,8 +3,8 @@
 class BadgesController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [ :show ]
 
-  VALID_STYLES = %w[flat plastic for-the-badge].freeze
-  VALID_TYPES = %w[score tier safety certification].freeze
+  VALID_STYLES = %w[ flat plastic for-the-badge ].freeze
+  VALID_TYPES = %w[ score tier safety certification ].freeze
 
   def show
     # Support both /badge/:agent_name and /agents/:id/badge routes

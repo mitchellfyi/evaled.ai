@@ -1,8 +1,8 @@
 class EvalTask < ApplicationRecord
   has_many :eval_runs, dependent: :destroy
 
-  CATEGORIES = %w[coding research workflow].freeze
-  DIFFICULTIES = %w[easy medium hard].freeze
+  CATEGORIES = %w[ coding research workflow ].freeze
+  DIFFICULTIES = %w[ easy medium hard ].freeze
 
   validates :name, presence: true
   validates :category, presence: true, inclusion: { in: CATEGORIES }

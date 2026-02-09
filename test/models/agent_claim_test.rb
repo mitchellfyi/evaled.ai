@@ -8,7 +8,7 @@ class AgentClaimTest < ActiveSupport::TestCase
 
   test "verified trait sets status and verified_at" do
     claim = build(:agent_claim, :verified)
-    
+
     assert_equal "verified", claim.status
     assert_not_nil claim.verified_at
   end

@@ -2,7 +2,7 @@ class EvalRun < ApplicationRecord
   belongs_to :agent
   belongs_to :eval_task
 
-  STATUSES = %w[pending running completed failed].freeze
+  STATUSES = %w[ pending running completed failed ].freeze
 
   validates :status, presence: true, inclusion: { in: STATUSES }
 

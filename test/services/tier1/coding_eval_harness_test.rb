@@ -99,9 +99,9 @@ module Tier1
     end
 
     test "load_initial_state handles nested paths" do
-      task = create(:eval_task,
-        initial_files: { "src/lib/helper.rb" => "module Helper; end" }
-      )
+      task = create(:eval_task)
+      task.define_singleton_method(:initial_files) { { "src/lib/helper.rb" => "module Helper; end" } }
+      task.define_singleton_method(:test_files) { {} }
       harness = CodingEvalHarness.new(@agent, task)
       harness.send(:setup_sandbox)
       harness.send(:load_initial_state)
@@ -172,7 +172,7 @@ module Tier1
     test "parse_agent_output handles various language markers" do
       harness = CodingEvalHarness.new(@agent, @task)
 
-      languages = %w[ruby python javascript js ts go rust java c cpp sh bash json yaml yml html css sql]
+      languages = %w[ ruby python javascript js ts go rust java c cpp sh bash json yaml yml html css sql ]
 
       languages.each do |lang|
         output = "```#{lang}\ncode\n```"
@@ -415,7 +415,9 @@ module Tier1
       response = harness.send(:execute_http_agent_request, "Test prompt")
 
       assert_not response[:success]
-      assert_includes response[:error], "timed out"
+      # WebMock timeout can return either "timed out" or "execution expired"
+      assert response[:error].include?("timed out") || response[:error].include?("execution expired"),
+        "Expected error to mention timeout but got: #{response[:error]}"
     end
 
     test "execute_local_agent returns success with empty output" do

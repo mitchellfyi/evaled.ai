@@ -8,7 +8,7 @@ class ClaimRequestTest < ActiveSupport::TestCase
 
   test "verified trait sets status and verification data" do
     request = build(:claim_request, :verified)
-    
+
     assert_equal "verified", request.status.to_s
     assert_not_nil request.verified_at
     assert_not_nil request.github_verification

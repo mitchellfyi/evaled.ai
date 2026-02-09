@@ -96,7 +96,7 @@ module Agents
 
       # Require admin or maintain permission for verification
       permission = permission_data["permission"]
-      %w[admin maintain].include?(permission)
+      %w[ admin maintain ].include?(permission)
     rescue GithubClient::RateLimitError
       Rails.logger.warn("GitHub API rate limit hit during claim verification for #{repo}")
       false

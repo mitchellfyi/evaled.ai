@@ -1,6 +1,6 @@
 module Tier0
   class DependencyRiskAnalyzer
-    PACKAGE_FILES = %w[package.json Gemfile requirements.txt go.mod Cargo.toml].freeze
+    PACKAGE_FILES = %w[ package.json Gemfile requirements.txt go.mod Cargo.toml ].freeze
 
     def initialize(agent)
       @agent = agent
@@ -20,7 +20,7 @@ module Tier0
     private
 
     def check_lockfile
-      lockfiles = %w[package-lock.json yarn.lock Gemfile.lock go.sum Cargo.lock]
+      lockfiles = %w[ package-lock.json yarn.lock Gemfile.lock go.sum Cargo.lock ]
       lockfiles.any? { |f| @client.contents(@owner, @repo, f).present? }
     end
 

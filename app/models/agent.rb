@@ -21,9 +21,9 @@ class Agent < ApplicationRecord
   scope :high_score, ->(min = 80) { where("score >= ?", min) }
   scope :recently_verified, -> { where("last_verified_at > ?", 30.days.ago) }
 
-  CATEGORIES = %w[coding research workflow assistant general].freeze
-  CLAIM_STATUSES = %w[unclaimed claimed verified].freeze
-  DECAY_RATES = %w[standard slow fast].freeze
+  CATEGORIES = %w[ coding research workflow assistant general ].freeze
+  CLAIM_STATUSES = %w[ unclaimed claimed verified ].freeze
+  DECAY_RATES = %w[ standard slow fast ].freeze
 
   # Tier 0 signal weights
   TIER0_WEIGHTS = {

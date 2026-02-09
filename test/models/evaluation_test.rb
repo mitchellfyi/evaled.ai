@@ -19,7 +19,7 @@ class EvaluationTest < ActiveSupport::TestCase
   end
 
   test "accepts valid tier values" do
-    %w[tier0 tier1 tier2].each do |tier|
+    %w[ tier0 tier1 tier2 ].each do |tier|
       evaluation = build(:evaluation, tier: tier)
       assert evaluation.valid?, "#{tier} should be valid"
     end
@@ -32,7 +32,7 @@ class EvaluationTest < ActiveSupport::TestCase
   end
 
   test "accepts valid status values" do
-    %w[pending running completed failed].each do |status|
+    %w[ pending running completed failed ].each do |status|
       evaluation = build(:evaluation, status: status)
       assert evaluation.valid?, "#{status} should be valid"
     end

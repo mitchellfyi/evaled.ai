@@ -26,7 +26,7 @@ class SecurityAuditService
     end
 
     severity_summary = summarize_severities(findings)
-    passed = findings.none? { |f| !f[:passed] && %w[critical high].include?(f[:severity]) }
+    passed = findings.none? { |f| !f[:passed] && %w[ critical high ].include?(f[:severity]) }
 
     SecurityAudit.create!(
       agent: @agent,

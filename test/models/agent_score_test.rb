@@ -79,7 +79,7 @@ class AgentScoreTest < ActiveSupport::TestCase
   end
 
   test "record_evaluation! updates tracking fields" do
-    score = create(:agent_score, 
+    score = create(:agent_score,
       overall_score: 90,
       score_at_eval: 80,
       last_verified_at: 30.days.ago,

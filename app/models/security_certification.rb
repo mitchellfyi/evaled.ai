@@ -1,8 +1,8 @@
 class SecurityCertification < ApplicationRecord
   belongs_to :agent
 
-  CERTIFICATION_TYPES = %w[safety security compliance enterprise].freeze
-  LEVELS = %w[bronze silver gold platinum].freeze
+  CERTIFICATION_TYPES = %w[ safety security compliance enterprise ].freeze
+  LEVELS = %w[ bronze silver gold platinum ].freeze
 
   validates :certification_type, presence: true, inclusion: { in: CERTIFICATION_TYPES }
   validates :level, presence: true, inclusion: { in: LEVELS }

@@ -28,7 +28,7 @@ class TelemetryEventTest < ActiveSupport::TestCase
 
   test "metadata can store additional info" do
     event = build(:telemetry_event, metadata: { source: "api", user_id: 123 })
-    
+
     assert_equal "api", event.metadata["source"]
     assert_equal 123, event.metadata["user_id"]
   end

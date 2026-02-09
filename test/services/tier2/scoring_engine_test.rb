@@ -227,54 +227,59 @@ module Tier2
     test "handles prompt injection tester errors gracefully" do
       engine = ScoringEngine.new(@agent)
 
-      PromptInjectionTester.stub :new, ->(_) { raise StandardError, "API Error" } do
-        score = engine.evaluate
+      PromptInjectionTester.stubs(:new).raises(StandardError.new("API Error"))
+      score = engine.evaluate
 
-        assert score.breakdown["test_results"]["prompt_injection"].key?("error")
-        assert_equal 0, score.breakdown["prompt_injection_score"]
-      end
+      assert score.breakdown["test_results"]["prompt_injection"].key?("error")
+      assert_equal 0, score.breakdown["prompt_injection_score"]
+    ensure
+      PromptInjectionTester.unstub(:new)
     end
 
     test "handles jailbreak tester errors gracefully" do
       engine = ScoringEngine.new(@agent)
 
-      JailbreakTester.stub :new, ->(_) { raise StandardError, "API Error" } do
-        score = engine.evaluate
+      JailbreakTester.stubs(:new).raises(StandardError.new("API Error"))
+      score = engine.evaluate
 
-        assert score.breakdown["test_results"]["jailbreak"].key?("error")
-        assert_equal 0, score.breakdown["jailbreak_score"]
-      end
+      assert score.breakdown["test_results"]["jailbreak"].key?("error")
+      assert_equal 0, score.breakdown["jailbreak_score"]
+    ensure
+      JailbreakTester.unstub(:new)
     end
 
     test "handles boundary tester errors gracefully" do
       engine = ScoringEngine.new(@agent)
 
-      BoundaryTester.stub :new, ->(_) { raise StandardError, "API Error" } do
-        score = engine.evaluate
+      BoundaryTester.stubs(:new).raises(StandardError.new("API Error"))
+      score = engine.evaluate
 
-        assert score.breakdown["test_results"]["boundary"].key?("error")
-        assert_equal 0, score.breakdown["boundary_score"]
-      end
+      assert score.breakdown["test_results"]["boundary"].key?("error")
+      assert_equal 0, score.breakdown["boundary_score"]
+    ensure
+      BoundaryTester.unstub(:new)
     end
 
     test "errors are included in tests_summary" do
       engine = ScoringEngine.new(@agent)
 
-      PromptInjectionTester.stub :new, ->(_) { raise StandardError, "Test Error" } do
-        score = engine.evaluate
+      PromptInjectionTester.stubs(:new).raises(StandardError.new("Test Error"))
+      score = engine.evaluate
 
-        assert score.breakdown["tests_summary"]["errors"] >= 1
-      end
+      assert score.breakdown["tests_summary"]["errors"] >= 1
+    ensure
+      PromptInjectionTester.unstub(:new)
     end
 
     test "recommendation mentions errors when tests fail" do
       engine = ScoringEngine.new(@agent)
 
-      PromptInjectionTester.stub :new, ->(_) { raise StandardError, "Test Error" } do
-        score = engine.evaluate
+      PromptInjectionTester.stubs(:new).raises(StandardError.new("Test Error"))
+      score = engine.evaluate
 
-        assert_includes score.breakdown["summary"]["recommendation"].downcase, "test"
-      end
+      assert_includes score.breakdown["summary"]["recommendation"].downcase, "test"
+    ensure
+      PromptInjectionTester.unstub(:new)
     end
 
     # === Edge Cases ===

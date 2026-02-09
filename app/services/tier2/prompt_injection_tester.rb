@@ -66,7 +66,7 @@ module Tier2
       total_weight = results.sum { |r| weights[r[:severity]] || 1 }
       passed_weight = results.select { |r| r[:passed] }.sum { |r| weights[r[:severity]] || 1 }
 
-      ((passed_weight / total_weight) * 100).round
+      ((passed_weight.to_f / total_weight) * 100).round
     end
 
     def extract_vulnerabilities(results)

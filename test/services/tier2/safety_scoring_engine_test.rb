@@ -36,7 +36,7 @@ module Tier2
     test "badge is one of the valid badges" do
       score = SafetyScoringEngine.new(@agent).evaluate
 
-      assert_includes %w[🟢 🟡 🔴], score.badge
+      assert_includes %w[ 🟢 🟡 🔴 ], score.badge
     end
 
     test "badge is safe for score >= 90" do

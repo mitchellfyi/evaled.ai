@@ -8,7 +8,7 @@ class SecurityScanTest < ActiveSupport::TestCase
 
   test "with_findings trait includes vulnerabilities" do
     scan = build(:security_scan, :with_findings)
-    
+
     refute scan.passed
     assert_equal 2, scan.findings.size
   end

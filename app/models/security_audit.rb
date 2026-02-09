@@ -1,8 +1,8 @@
 class SecurityAudit < ApplicationRecord
   belongs_to :agent
 
-  AUDIT_TYPES = %w[automated manual penetration compliance].freeze
-  SEVERITIES = %w[critical high medium low info].freeze
+  AUDIT_TYPES = %w[ automated manual penetration compliance ].freeze
+  SEVERITIES = %w[ critical high medium low info ].freeze
 
   validates :auditor, presence: true
   validates :audit_type, presence: true, inclusion: { in: AUDIT_TYPES }

@@ -1,6 +1,6 @@
 module Tier0
   class DocumentationAnalyzer
-    README_SECTIONS = %w[installation usage api examples contributing license].freeze
+    README_SECTIONS = %w[ installation usage api examples contributing license ].freeze
 
     def initialize(agent)
       @agent = agent
@@ -26,7 +26,7 @@ module Tier0
     private
 
     def fetch_readme
-      %w[README.md readme.md README.rst README].each do |name|
+      %w[ README.md readme.md README.rst README ].each do |name|
         content = @client.contents(@owner, @repo, name)
         next unless content&.dig("content")
         return Base64.decode64(content["content"])
