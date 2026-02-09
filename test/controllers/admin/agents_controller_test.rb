@@ -34,9 +34,8 @@ module Admin
     end
 
     test "show returns not found for nonexistent agent" do
-      assert_raises(ActiveRecord::RecordNotFound) do
-        get admin_agent_path(id: "nonexistent-slug")
-      end
+      get admin_agent_path(id: "nonexistent-slug")
+      assert_response :not_found
     end
 
     # Edit tests
@@ -46,9 +45,8 @@ module Admin
     end
 
     test "edit returns not found for nonexistent agent" do
-      assert_raises(ActiveRecord::RecordNotFound) do
-        get edit_admin_agent_path(id: "nonexistent-slug")
-      end
+      get edit_admin_agent_path(id: "nonexistent-slug")
+      assert_response :not_found
     end
 
     # Update tests
@@ -106,9 +104,8 @@ module Admin
     end
 
     test "destroy returns not found for nonexistent agent" do
-      assert_raises(ActiveRecord::RecordNotFound) do
-        delete admin_agent_path(id: "nonexistent-slug")
-      end
+      delete admin_agent_path(id: "nonexistent-slug")
+      assert_response :not_found
     end
 
     # Authorization tests

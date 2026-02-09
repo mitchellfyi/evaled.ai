@@ -39,9 +39,8 @@ module Admin
     end
 
     test "show returns not found for nonexistent user" do
-      assert_raises(ActiveRecord::RecordNotFound) do
-        get admin_user_path(id: 99999)
-      end
+      get admin_user_path(id: 99999)
+      assert_response :not_found
     end
 
     # Edit tests
@@ -51,9 +50,8 @@ module Admin
     end
 
     test "edit returns not found for nonexistent user" do
-      assert_raises(ActiveRecord::RecordNotFound) do
-        get edit_admin_user_path(id: 99999)
-      end
+      get edit_admin_user_path(id: 99999)
+      assert_response :not_found
     end
 
     # Update tests
@@ -74,7 +72,7 @@ module Admin
     end
 
     test "update allows changing admin status for other users" do
-      patch admin_user_path(@user), params: { user: { admin: true } }
+      patch admin_user_path(@user), params: { user: { email: @user.email, admin: true } }
 
       assert_redirected_to admin_user_path(@user)
       @user.reload
@@ -82,7 +80,7 @@ module Admin
     end
 
     test "update prevents self-demotion" do
-      patch admin_user_path(@admin), params: { user: { admin: false } }
+      patch admin_user_path(@admin), params: { user: { email: @admin.email, admin: false } }
 
       # Admin status should not change for self
       @admin.reload
@@ -100,9 +98,8 @@ module Admin
     end
 
     test "destroy returns not found for nonexistent user" do
-      assert_raises(ActiveRecord::RecordNotFound) do
-        delete admin_user_path(id: 99999)
-      end
+      delete admin_user_path(id: 99999)
+      assert_response :not_found
     end
 
     # Authorization tests

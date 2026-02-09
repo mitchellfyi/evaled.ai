@@ -45,9 +45,8 @@ module Admin
     end
 
     test "destroy returns not found for nonexistent api key" do
-      assert_raises(ActiveRecord::RecordNotFound) do
-        delete admin_api_key_path(id: 99999)
-      end
+      delete admin_api_key_path(id: 99999)
+      assert_response :not_found
     end
 
     test "destroy can revoke any users api key" do
