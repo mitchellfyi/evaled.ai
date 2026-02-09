@@ -9,3 +9,9 @@ admin = User.find_or_create_by!(email: admin_email) do |u|
 end
 admin.add_role(:admin) unless admin.has_role?(:admin)
 puts "Admin user: #{admin.email}"
+
+# Optionally seed agents from GitHub
+if ENV["SEED_AGENTS"] == "true"
+  puts "Seeding agents from GitHub..."
+  Rake::Task["agents:seed"].invoke
+end
