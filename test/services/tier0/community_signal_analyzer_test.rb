@@ -128,6 +128,8 @@ module Tier0
       stub_github_repo(stars: 100, forks: 20)
       stub_request(:get, %r{api.github.com/repos/.*/stargazers})
         .to_return(status: 403, body: { message: "API rate limit exceeded" }.to_json)
+      stub_request(:get, %r{api.github.com/repos/.*/forks})
+        .to_return(status: 200, body: "[]", headers: { "Content-Type" => "application/json" })
 
       result = CommunitySignalAnalyzer.new(@agent).analyze
 
@@ -150,14 +152,21 @@ module Tier0
       stub_github_stargazers(count: 10, quality: :high)
       stub_github_forks(count: 5, quality: :high)
 
-      # First call
+      # First call populates cache
       CommunitySignalAnalyzer.new(@agent).analyze
 
-      # Remove stubs - second call should use cache
+      # Remove stubs - second call should use cache for stargazers/forks
       WebMock.reset!
       stub_github_repo(stars: 50, forks: 10)
+      # User details may still be fetched, so stub those
+      stub_request(:get, %r{api.github.com/users/})
+        .to_return(
+          status: 200,
+          body: { "login" => "testuser", "public_repos" => 10, "followers" => 50, "created_at" => 3.years.ago.iso8601, "updated_at" => 1.day.ago.iso8601 }.to_json,
+          headers: { "Content-Type" => "application/json" }
+        )
 
-      # Should not fail even without stargazer endpoint stub
+      # Should not fail even without stargazer/forks endpoint stubs
       result = CommunitySignalAnalyzer.new(@agent).analyze
 
       assert result[:score] > 0
@@ -199,12 +208,16 @@ module Tier0
         { "user" => user, "starred_at" => starred_at }
       end
 
+      # Stub with pagination awareness - only return data on page 1
       stub_request(:get, %r{api.github.com/repos/.*/stargazers})
-        .to_return(
-          status: 200,
-          body: stargazers.to_json,
-          headers: { "Content-Type" => "application/json" }
-        )
+        .to_return do |request|
+          page = request.uri.query_values&.fetch("page", "1") || "1"
+          {
+            status: 200,
+            body: page == "1" ? stargazers.to_json : "[]",
+            headers: { "Content-Type" => "application/json" }
+          }
+        end
 
       # Set up user endpoint stub if not already done
       stub_github_users unless @users_stubbed
@@ -222,12 +235,16 @@ module Tier0
         }
       end
 
+      # Stub with pagination awareness - only return data on page 1
       stub_request(:get, %r{api.github.com/repos/.*/forks})
-        .to_return(
-          status: 200,
-          body: forks.to_json,
-          headers: { "Content-Type" => "application/json" }
-        )
+        .to_return do |request|
+          page = request.uri.query_values&.fetch("page", "1") || "1"
+          {
+            status: 200,
+            body: page == "1" ? forks.to_json : "[]",
+            headers: { "Content-Type" => "application/json" }
+          }
+        end
 
       # Set up user endpoint stub if not already done
       stub_github_users unless @users_stubbed
@@ -282,7 +299,7 @@ module Tier0
           "login" => "user#{index}",
           "id" => 2000 + index,
           "created_at" => (Time.current - rand(10..25).days).iso8601,
-          "updated_at" => (Time.current - rand(30).days).iso8601,
+          "updated_at" => (Time.current - rand(400..500).days).iso8601,
           "public_repos" => 0,
           "followers" => 0
         }
