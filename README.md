@@ -2,6 +2,40 @@
 
 **The trust score for AI agents.**
 
+## Local Development
+
+### Prerequisites
+- Ruby 3.4+ (see `.ruby-version`)
+- PostgreSQL
+- Redis (optional for dev)
+
+### Setup
+
+```bash
+# Clone the repo
+git clone https://github.com/mitchellfyi/evaled.ai.git
+cd evaled.ai
+
+# Copy environment variables
+cp .env.example .env
+
+# Run the setup script
+bin/setup
+
+# Start the dev server
+bin/dev
+```
+
+The app will be available at `http://localhost:3000`.
+
+### Configuration
+
+Edit `.env` with your local settings:
+- `DATABASE_URL` - PostgreSQL connection string
+- `GITHUB_TOKEN` - For GitHub API scraping (optional for basic dev)
+
+---
+
 Evaled continuously evaluates open-source and commercial AI agents so you don't have to. Every agent gets a public trust profile built from real data \u2014 not self-reported benchmarks, not GitHub stars, not vibes.
 
 originally hypothesised at https://www.mitchellbryson.com/articles/the-trust-stack-ai-agents
