@@ -42,6 +42,7 @@ module Tier0
       assert score.breakdown.key?("bus_factor")
       assert score.breakdown.key?("dependency_risk")
       assert score.breakdown.key?("documentation")
+      assert score.breakdown.key?("maintenance_pulse")
     end
 
     test "evaluate sets evaluated_at" do
@@ -112,6 +113,13 @@ module Tier0
 
       assert score.breakdown["documentation"].present?
       assert score.breakdown["documentation"].key?("score")
+    end
+
+    test "breakdown includes maintenance_pulse with score" do
+      score = ScoringEngine.new(@agent).evaluate
+
+      assert score.breakdown["maintenance_pulse"].present?
+      assert score.breakdown["maintenance_pulse"].key?("score")
     end
 
     private
@@ -201,6 +209,13 @@ module Tier0
           public_repos: 15,
           followers: 30
         }.to_json, headers: { "Content-Type" => "application/json" })
+
+      # Stub releases (for MaintenancePulseAnalyzer)
+      releases = 6.times.map do |i|
+        { id: i + 1, published_at: (30 * (i + 1)).days.ago.iso8601, created_at: (30 * (i + 1)).days.ago.iso8601 }
+      end
+      stub_request(:get, %r{api.github.com/repos/.*/releases})
+        .to_return(status: 200, body: releases.to_json, headers: { "Content-Type" => "application/json" })
     end
   end
 end

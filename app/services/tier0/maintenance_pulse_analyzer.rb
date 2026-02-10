@@ -52,7 +52,9 @@ module Tier0
     end
 
     def fetch_repo_info
-      @cache.fetch("github_repo:#{@owner}/#{@repo}", expires_in: 1.hour) { @client.repo(@owner, @repo) }
+      info = @cache.fetch("github_repo:#{@owner}/#{@repo}", expires_in: 1.hour) { @client.repo(@owner, @repo) }
+      # Return nil if this is an error response (e.g., 404)
+      info && info["name"] ? info : nil
     end
 
     def analyze_commit_recency(repo_info)

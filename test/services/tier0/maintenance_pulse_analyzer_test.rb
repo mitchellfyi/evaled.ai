@@ -32,6 +32,8 @@ module Tier0
     test "returns zero score when repo not found" do
       stub_request(:get, %r{api.github.com/repos/testowner/testrepo$})
         .to_return(status: 404, body: { message: "Not Found" }.to_json)
+      stub_releases(count: 0)
+      stub_issues(count: 0)
 
       result = MaintenancePulseAnalyzer.new(@agent).analyze
 
