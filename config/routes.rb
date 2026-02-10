@@ -60,6 +60,7 @@ Rails.application.routes.draw do
       resources :agents, only: [:index, :show] do
         member do
           get :score
+          get :related
         end
         collection do
           get :compare

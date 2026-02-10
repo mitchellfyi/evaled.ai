@@ -26,6 +26,7 @@ class AgentsController < ApplicationController
   def show
     @agent = Agent.published.find_by!(slug: params[:id])
     @evaluations = @agent.evaluations.completed.recent.limit(10)
+    @related_agents = CoOccurrenceAnalyzer.related_agents(@agent, limit: 5)
   end
 
   def compare

@@ -23,6 +23,17 @@ module Api
         render json: score_response(agent)
       end
 
+      def related
+        agent = Agent.published.find_by!(slug: params[:id])
+        limit = [(params[:limit] || 5).to_i, 10].min
+        related = CoOccurrenceAnalyzer.related_agents(agent, limit: limit)
+
+        render json: {
+          agent: agent.slug,
+          related: related
+        }
+      end
+
       def compare
         slugs = params[:agents].to_s.split(",").map(&:strip).first(5)
         agents = Agent.published.where(slug: slugs)
