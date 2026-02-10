@@ -16,6 +16,9 @@ Rails.application.routes.draw do
   get "methodology", to: "pages#methodology"
   get "badges", to: "pages#badges"
 
+  # Agent submission (public)
+  resource :agent_submissions, only: [:new, :create], path: "agents/submit", controller: "agents/submissions"
+
   # Agent pages (SEO-friendly)
   resources :agents, only: [:index, :show], path: "agents" do
     member do
