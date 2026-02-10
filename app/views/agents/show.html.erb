@@ -286,6 +286,32 @@
     </p>
   </div>
 
+  <!-- Frequently Deployed With -->
+  <% if @related_agents.present? %>
+  <div class="bg-white rounded-xl p-6 shadow mb-8">
+    <h2 class="text-lg font-bold text-gray-900 mb-4">Frequently Deployed With</h2>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <% @related_agents.each do |related| %>
+        <%= link_to agent_path(related[:slug]), class: "block p-4 bg-gray-50 rounded-lg hover:bg-indigo-50 transition-colors text-center" do %>
+          <div class="font-medium text-gray-900 truncate"><%= related[:name] %></div>
+          <% if related[:score] %>
+            <div class="text-sm <%= score_color_class(related[:score]) %>"><%= related[:score] %></div>
+          <% end %>
+          <% if related[:category] %>
+            <div class="text-xs text-gray-400 mt-1"><%= related[:category]&.titleize %></div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+    <p class="text-sm text-gray-500 mt-4">
+      Based on agent interactions and category similarity. 
+      <% if @related_agents.any? { |a| a[:from_interactions] } %>
+        <span class="text-indigo-600">Some have reported direct interactions.</span>
+      <% end %>
+    </p>
+  </div>
+  <% end %>
+
   <!-- Evaluation History -->
   <% if @evaluations.present? %>
   <div class="bg-white rounded-xl p-6 shadow">
