@@ -1,6 +1,6 @@
 # Evaled.ai Deploy Gate - GitHub Action Template
 #
-# This workflow checks agent scores on evaled.ai before deployment.
+# This workflow checks agent scores on evald.ai before deployment.
 # Add this to your .github/workflows/ directory.
 #
 # Requirements:
@@ -21,7 +21,7 @@ on:
   workflow_dispatch:
 
 env:
-  EVALED_API_URL: https://evaled.ai/api/v1
+  EVALED_API_URL: https://evald.ai/api/v1
 
 jobs:
   check-agent-scores:
@@ -36,7 +36,7 @@ jobs:
           AGENTS='["your-agent-slug", "another-agent-slug"]'
           MIN_SCORE=70
 
-          echo "Checking agent scores on evaled.ai..."
+          echo "Checking agent scores on evald.ai..."
           echo "Agents: $AGENTS"
           echo "Minimum Score: $MIN_SCORE"
 

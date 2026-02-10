@@ -1,12 +1,12 @@
-# Dockerfile for evaled.ai Sandbox Execution Environment
+# Dockerfile for evald.ai Sandbox Execution Environment
 # This container provides an isolated environment for evaluating code submissions
 # across multiple languages with strict security constraints.
 
 FROM ubuntu:22.04
 
-LABEL maintainer="evaled.ai"
+LABEL maintainer="evald.ai"
 LABEL description="Sandboxed code evaluation environment"
-LABEL evaled.component="sandbox"
+LABEL evald.component="sandbox"
 
 # Prevent interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive

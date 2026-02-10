@@ -62,7 +62,7 @@ class GithubScraperJob < ApplicationJob
 
     request = Net::HTTP::Get.new(uri)
     request["Accept"] = "application/vnd.github.v3+json"
-    request["User-Agent"] = "evaled.ai-scraper"
+    request["User-Agent"] = "evald.ai-scraper"
 
     # Use GitHub token from credentials (preferred) or ENV fallback
     github_token = Rails.application.credentials.dig(:github, :token) || ENV["GITHUB_TOKEN"]
