@@ -51,16 +51,6 @@ module Builder
 
     private
 
-    def set_agent
-      @agent = Agent.find_by!(slug: params[:agent_id])
-    end
-
-    def authorize_agent
-      unless @agent.claimed_by_user == current_user
-        redirect_to builder_root_path, alert: "You don't have permission to manage webhooks for this agent."
-      end
-    end
-
     def set_webhook
       @webhook = @agent.webhook_endpoints.find(params[:id])
     end

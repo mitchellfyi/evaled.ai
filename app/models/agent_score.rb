@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class AgentScore < ApplicationRecord
+  include Webhookable
+  include Expirable
+
   belongs_to :agent
 
   # Decay rate determines how quickly the score degrades over time
@@ -10,16 +13,12 @@ class AgentScore < ApplicationRecord
   validates :overall_score, presence: true, inclusion: { in: 0..100 }
 
   scope :tier0, -> { where(tier: 0) }
-  scope :current, -> { where("expires_at > ?", Time.current) }
+  scope :current, -> { not_expired }
   scope :latest, -> { order(evaluated_at: :desc) }
   scope :needing_reverification, lambda {
     where("next_eval_scheduled_at <= ?", Time.current)
       .or(where(next_eval_scheduled_at: nil))
   }
-
-  # Webhook notifications for score changes
-  after_create :notify_webhook_created
-  after_update :notify_webhook_updated, if: :score_changed?
 
   # Returns the current decayed score based on time elapsed since evaluation
   #
@@ -76,15 +75,7 @@ class AgentScore < ApplicationRecord
     }
   end
 
-  def notify_webhook_created
-    WebhookService.trigger(agent, "score.created", webhook_payload)
-  rescue StandardError => e
-    Rails.logger.error("[Webhook] Failed to trigger score.created: #{e.message}")
-  end
-
-  def notify_webhook_updated
-    WebhookService.trigger(agent, "score.updated", webhook_payload)
-  rescue StandardError => e
-    Rails.logger.error("[Webhook] Failed to trigger score.updated: #{e.message}")
+  def webhook_event_prefix
+    "score"
   end
 end

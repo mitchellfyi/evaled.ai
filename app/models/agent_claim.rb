@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class AgentClaim < ApplicationRecord
+  include Expirable
+
   belongs_to :agent
   belongs_to :user
 
@@ -11,7 +13,7 @@ class AgentClaim < ApplicationRecord
 
   scope :pending, -> { where(status: "pending") }
   scope :verified, -> { where(status: "verified") }
-  scope :active, -> { verified.where("expires_at IS NULL OR expires_at > ?", Time.current) }
+  scope :active, -> { verified.not_expired }
 
   def verified?
     status == "verified"

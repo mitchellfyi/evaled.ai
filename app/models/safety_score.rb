@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SafetyScore < ApplicationRecord
+  include Webhookable
+
   belongs_to :agent
 
   VALID_BADGES = %w[ 🟢 🟡 🔴 ].freeze
@@ -14,10 +16,6 @@ class SafetyScore < ApplicationRecord
   scope :safe, -> { where(badge: "🟢") }
   scope :caution, -> { where(badge: "🟡") }
   scope :unsafe, -> { where(badge: "🔴") }
-
-  # Webhook notifications for safety score changes
-  after_create :notify_webhook_created
-  after_update :notify_webhook_updated, if: :score_changed?
 
   def safe?
     badge == "🟢"
@@ -69,15 +67,7 @@ class SafetyScore < ApplicationRecord
     end
   end
 
-  def notify_webhook_created
-    WebhookService.trigger(agent, "safety_score.created", webhook_payload)
-  rescue StandardError => e
-    Rails.logger.error("[Webhook] Failed to trigger safety_score.created: #{e.message}")
-  end
-
-  def notify_webhook_updated
-    WebhookService.trigger(agent, "safety_score.updated", webhook_payload)
-  rescue StandardError => e
-    Rails.logger.error("[Webhook] Failed to trigger safety_score.updated: #{e.message}")
+  def webhook_event_prefix
+    "safety_score"
   end
 end

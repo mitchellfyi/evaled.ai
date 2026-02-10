@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Certification < ApplicationRecord
+  include Expirable
+
   belongs_to :agent
 
   enum :tier, { bronze: 0, silver: 1, gold: 2 }

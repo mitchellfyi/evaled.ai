@@ -21,16 +21,6 @@ module Builder
 
     private
 
-    def set_agent
-      @agent = Agent.find_by!(slug: params[:agent_id])
-    end
-
-    def authorize_agent
-      unless @agent.claimed_by_user == current_user
-        redirect_to builder_root_path, alert: "You don't have permission to manage this agent."
-      end
-    end
-
     def notification_params
       params.expect(notification_preference: [:score_changes, :new_eval_results,
         :comparison_mentions, :email_enabled])

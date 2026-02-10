@@ -19,16 +19,6 @@ module Builder
 
     private
 
-    def set_agent
-      @agent = Agent.find_by!(slug: params[:id])
-    end
-
-    def authorize_agent
-      unless @agent.claimed_by_user == current_user
-        redirect_to builder_root_path, alert: "You don't have permission to edit this agent."
-      end
-    end
-
     # Only allow builder-editable fields
     def builder_agent_params
       params.expect(agent: [:description, :tagline, :use_case,

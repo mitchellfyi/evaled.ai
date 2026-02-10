@@ -1,83 +1,63 @@
 # frozen_string_literal: true
 module AgentsHelper
+  SCORE_STYLES = {
+    (90..100) => { color: "text-green-600", bar: "bg-green-500" },
+    (80..89)  => { color: "text-green-500", bar: "bg-green-400" },
+    (70..79)  => { color: "text-yellow-600", bar: "bg-yellow-500" },
+    (60..69)  => { color: "text-yellow-500", bar: "bg-yellow-400" },
+    (50..59)  => { color: "text-orange-500", bar: "bg-orange-500" }
+  }.freeze
+
+  CONFIDENCE_STYLES = {
+    "high"   => { badge: "bg-green-100 text-green-700", label: "High Confidence" },
+    "medium" => { badge: "bg-yellow-100 text-yellow-700", label: "Medium Confidence" },
+    "low"    => { badge: "bg-orange-100 text-orange-700", label: "Low Confidence" }
+  }.freeze
+
+  CONFIDENCE_TOOLTIPS = {
+    "high"   => "Score based on comprehensive Tier 0 and Tier 1 evaluations with multiple recent runs.",
+    "medium" => "Score based on Tier 0 evaluation with partial Tier 1 data or recent evaluation activity.",
+    "low"    => "Score based on Tier 0 passive signals only. No Tier 1 task evaluations completed."
+  }.freeze
+
+  TIER_STYLES = {
+    "platinum" => { badge: "bg-gradient-to-r from-slate-300 to-slate-400 text-slate-800", label: "⭐ Platinum" },
+    "gold"     => { badge: "bg-gradient-to-r from-yellow-300 to-yellow-400 text-yellow-800", label: "🥇 Gold" },
+    "silver"   => { badge: "bg-gradient-to-r from-gray-200 to-gray-300 text-gray-700", label: "🥈 Silver" },
+    "bronze"   => { badge: "bg-gradient-to-r from-orange-200 to-orange-300 text-orange-800", label: "🥉 Bronze" }
+  }.freeze
+
   def score_color_class(score)
     return "text-gray-400" unless score
-
-    case score.to_f
-    when 90..100 then "text-green-600"
-    when 80..89 then "text-green-500"
-    when 70..79 then "text-yellow-600"
-    when 60..69 then "text-yellow-500"
-    when 50..59 then "text-orange-500"
-    else "text-red-500"
-    end
+    score_style(score, :color) || "text-red-500"
   end
 
   def score_bar_class(score)
     return "bg-gray-300" unless score
-
-    case score.to_f
-    when 90..100 then "bg-green-500"
-    when 80..89 then "bg-green-400"
-    when 70..79 then "bg-yellow-500"
-    when 60..69 then "bg-yellow-400"
-    when 50..59 then "bg-orange-500"
-    else "bg-red-500"
-    end
+    score_style(score, :bar) || "bg-red-500"
   end
 
   def confidence_badge_class(level)
-    case level.to_s
-    when "high" then "bg-green-100 text-green-700"
-    when "medium" then "bg-yellow-100 text-yellow-700"
-    when "low" then "bg-orange-100 text-orange-700"
-    else "bg-gray-100 text-gray-500"
-    end
+    CONFIDENCE_STYLES.dig(level.to_s, :badge) || "bg-gray-100 text-gray-500"
   end
 
   def confidence_label(level)
-    case level.to_s
-    when "high" then "High Confidence"
-    when "medium" then "Medium Confidence"
-    when "low" then "Low Confidence"
-    else "Insufficient Data"
-    end
+    CONFIDENCE_STYLES.dig(level.to_s, :label) || "Insufficient Data"
   end
 
   def confidence_tooltip(level)
-    case level.to_s
-    when "high"
-      "Score based on comprehensive Tier 0 and Tier 1 evaluations with multiple recent runs."
-    when "medium"
-      "Score based on Tier 0 evaluation with partial Tier 1 data or recent evaluation activity."
-    when "low"
-      "Score based on Tier 0 passive signals only. No Tier 1 task evaluations completed."
-    else
+    CONFIDENCE_TOOLTIPS[level.to_s] ||
       "Minimal data available. This score may change significantly as more evaluations are completed."
-    end
   end
 
   def tier_badge_class(tier)
-    case tier.to_s
-    when "platinum" then "bg-gradient-to-r from-slate-300 to-slate-400 text-slate-800"
-    when "gold" then "bg-gradient-to-r from-yellow-300 to-yellow-400 text-yellow-800"
-    when "silver" then "bg-gradient-to-r from-gray-200 to-gray-300 text-gray-700"
-    when "bronze" then "bg-gradient-to-r from-orange-200 to-orange-300 text-orange-800"
-    else "bg-gray-100 text-gray-500"
-    end
+    TIER_STYLES.dig(tier.to_s, :badge) || "bg-gray-100 text-gray-500"
   end
 
   def tier_label(tier)
-    case tier.to_s
-    when "platinum" then "⭐ Platinum"
-    when "gold" then "🥇 Gold"
-    when "silver" then "🥈 Silver"
-    when "bronze" then "🥉 Bronze"
-    else "Unrated"
-    end
+    TIER_STYLES.dig(tier.to_s, :label) || "Unrated"
   end
 
-  # Calculate and return trend indicator data for an agent's score
   def score_trend_indicator(agent)
     scores = agent.evaluations
       .completed
@@ -103,5 +83,12 @@ module AgentsHelper
     else
       { show: true, icon: "→", class: "text-gray-400", label: "Stable" }
     end
+  end
+
+  private
+
+  def score_style(score, key)
+    _, style = SCORE_STYLES.find { |range, _| range.cover?(score.to_f) }
+    style&.[](key)
   end
 end

@@ -89,7 +89,7 @@ module Tier1
     test "executes all steps" do
       harness = WorkflowEvalHarness.new(@agent, @task)
 
-      result = harness.send(:execute_workflow)
+      result = harness.send(:execute_task)
 
       assert_equal 3, result[:step_results].count
     end
@@ -97,7 +97,7 @@ module Tier1
     test "step_results include step number" do
       harness = WorkflowEvalHarness.new(@agent, @task)
 
-      result = harness.send(:execute_workflow)
+      result = harness.send(:execute_task)
 
       assert_equal 1, result[:step_results].first[:step]
       assert_equal 3, result[:step_results].last[:step]
@@ -106,7 +106,7 @@ module Tier1
     test "step_results include step name" do
       harness = WorkflowEvalHarness.new(@agent, @task)
 
-      result = harness.send(:execute_workflow)
+      result = harness.send(:execute_task)
 
       assert_equal "Step 1", result[:step_results].first[:name]
     end
@@ -119,7 +119,7 @@ module Tier1
         { step: index + 1, name: step["name"], success: index < 2, recovered: false, scope_violation: false, escalated: false, tokens: 100 }
       end
 
-      result = harness.send(:execute_workflow)
+      result = harness.send(:execute_task)
       metrics = harness.send(:calculate_metrics, result)
 
       assert_in_delta 0.67, metrics[:completion_rate], 0.01
@@ -132,7 +132,7 @@ module Tier1
         { step: index + 1, name: step["name"], success: true, recovered: false, scope_violation: false, escalated: false, tokens: 100 }
       end
 
-      result = harness.send(:execute_workflow)
+      result = harness.send(:execute_task)
       metrics = harness.send(:calculate_metrics, result)
 
       assert metrics[:passed]
@@ -145,7 +145,7 @@ module Tier1
         { step: index + 1, name: step["name"], success: index.zero?, recovered: false, scope_violation: false, escalated: false, tokens: 100 }
       end
 
-      result = harness.send(:execute_workflow)
+      result = harness.send(:execute_task)
       metrics = harness.send(:calculate_metrics, result)
 
       assert_not metrics[:passed]
@@ -158,7 +158,7 @@ module Tier1
         { step: index + 1, name: step["name"], success: true, recovered: false, scope_violation: false, escalated: false, tokens: 100 }
       end
 
-      result = harness.send(:execute_workflow)
+      result = harness.send(:execute_task)
       metrics = harness.send(:calculate_metrics, result)
 
       assert metrics[:stayed_in_scope]
@@ -171,7 +171,7 @@ module Tier1
         { step: index + 1, name: step["name"], success: true, recovered: false, scope_violation: index == 1, escalated: false, tokens: 100 }
       end
 
-      result = harness.send(:execute_workflow)
+      result = harness.send(:execute_task)
       metrics = harness.send(:calculate_metrics, result)
 
       assert_not metrics[:stayed_in_scope]
@@ -185,7 +185,7 @@ module Tier1
         { step: index + 1, name: step["name"], success: true, recovered: false, scope_violation: false, escalated: false, tokens: 100 }
       end
 
-      result = harness.send(:execute_workflow)
+      result = harness.send(:execute_task)
       metrics = harness.send(:calculate_metrics, result)
 
       assert_equal 1.0, metrics[:error_recovery_rate]
@@ -194,7 +194,7 @@ module Tier1
     test "handles errors gracefully" do
       harness = WorkflowEvalHarness.new(@agent, @task)
 
-      def harness.execute_workflow
+      def harness.execute_task
         raise StandardError, "Workflow failed"
       end
 
@@ -208,7 +208,7 @@ module Tier1
       task = create(:eval_task, :workflow, expected_output: { "steps" => [] })
       harness = WorkflowEvalHarness.new(@agent, task)
 
-      result = harness.send(:execute_workflow)
+      result = harness.send(:execute_task)
       metrics = harness.send(:calculate_metrics, result)
 
       assert_not metrics[:passed]
