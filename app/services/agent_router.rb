@@ -60,7 +60,7 @@ class AgentRouter
         column = Agent::DOMAIN_SCORE_COLUMNS[domain]
         next scope unless column
 
-        scope.or(agents.where("#{column} > ?", 0))
+        scope.or(agents.where(Agent.arel_table[column].gt(0)))
       end
 
       # Combine: category match OR domain match
