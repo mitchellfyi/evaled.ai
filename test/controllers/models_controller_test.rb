@@ -53,4 +53,12 @@ class ModelsControllerTest < ActionDispatch::IntegrationTest
     get compare_models_path
     assert_response :success
   end
+
+  test "compare limits to 4 models" do
+    models = 5.times.map { |i| create(:ai_model, slug: "limit-model-#{i}") }
+    slugs = models.map(&:slug).join(",")
+
+    get compare_models_path(models: slugs)
+    assert_response :success
+  end
 end

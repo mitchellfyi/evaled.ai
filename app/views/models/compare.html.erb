@@ -71,37 +71,73 @@
           <tr>
             <td class="px-6 py-3 text-sm text-gray-500">Vision</td>
             <% @models.each do |model| %>
-              <td class="px-6 py-3 text-sm text-center"><%= model.supports_vision ? "✅" : "❌" %></td>
+              <td class="px-6 py-3 text-sm text-center">
+                <% if model.supports_vision %>
+                  <span aria-label="Supported">✅</span>
+                <% else %>
+                  <span aria-label="Not supported">❌</span>
+                <% end %>
+              </td>
             <% end %>
           </tr>
           <tr>
             <td class="px-6 py-3 text-sm text-gray-500">Function Calling</td>
             <% @models.each do |model| %>
-              <td class="px-6 py-3 text-sm text-center"><%= model.supports_function_calling ? "✅" : "❌" %></td>
+              <td class="px-6 py-3 text-sm text-center">
+                <% if model.supports_function_calling %>
+                  <span aria-label="Supported">✅</span>
+                <% else %>
+                  <span aria-label="Not supported">❌</span>
+                <% end %>
+              </td>
             <% end %>
           </tr>
           <tr>
             <td class="px-6 py-3 text-sm text-gray-500">JSON Mode</td>
             <% @models.each do |model| %>
-              <td class="px-6 py-3 text-sm text-center"><%= model.supports_json_mode ? "✅" : "❌" %></td>
+              <td class="px-6 py-3 text-sm text-center">
+                <% if model.supports_json_mode %>
+                  <span aria-label="Supported">✅</span>
+                <% else %>
+                  <span aria-label="Not supported">❌</span>
+                <% end %>
+              </td>
             <% end %>
           </tr>
           <tr>
             <td class="px-6 py-3 text-sm text-gray-500">Streaming</td>
             <% @models.each do |model| %>
-              <td class="px-6 py-3 text-sm text-center"><%= model.supports_streaming ? "✅" : "❌" %></td>
+              <td class="px-6 py-3 text-sm text-center">
+                <% if model.supports_streaming %>
+                  <span aria-label="Supported">✅</span>
+                <% else %>
+                  <span aria-label="Not supported">❌</span>
+                <% end %>
+              </td>
             <% end %>
           </tr>
           <tr>
             <td class="px-6 py-3 text-sm text-gray-500">Fine-tuning</td>
             <% @models.each do |model| %>
-              <td class="px-6 py-3 text-sm text-center"><%= model.supports_fine_tuning ? "✅" : "❌" %></td>
+              <td class="px-6 py-3 text-sm text-center">
+                <% if model.supports_fine_tuning %>
+                  <span aria-label="Supported">✅</span>
+                <% else %>
+                  <span aria-label="Not supported">❌</span>
+                <% end %>
+              </td>
             <% end %>
           </tr>
           <tr>
             <td class="px-6 py-3 text-sm text-gray-500">Embedding</td>
             <% @models.each do |model| %>
-              <td class="px-6 py-3 text-sm text-center"><%= model.supports_embedding ? "✅" : "❌" %></td>
+              <td class="px-6 py-3 text-sm text-center">
+                <% if model.supports_embedding %>
+                  <span aria-label="Supported">✅</span>
+                <% else %>
+                  <span aria-label="Not supported">❌</span>
+                <% end %>
+              </td>
             <% end %>
           </tr>
         </tbody>

@@ -114,6 +114,30 @@ class AiModelTest < ActiveSupport::TestCase
     assert_includes AiModel.by_family("GPT-4"), gpt4
   end
 
+  test "validates provider inclusion" do
+    model = build(:ai_model, provider: "UnknownProvider")
+    assert_not model.valid?
+    assert_includes model.errors[:provider], "is not included in the list"
+  end
+
+  test "validates status inclusion" do
+    model = build(:ai_model, status: "unknown")
+    assert_not model.valid?
+    assert_includes model.errors[:status], "is not included in the list"
+  end
+
+  test "validates URL format rejects invalid URLs" do
+    model = build(:ai_model, website_url: "javascript:alert(1)")
+    assert_not model.valid?
+    assert_includes model.errors[:website_url], "must be a valid HTTP/HTTPS URL"
+  end
+
+  test "validates URL format accepts valid HTTP URLs" do
+    model = build(:ai_model, website_url: "https://example.com")
+    model.valid?
+    assert_empty model.errors[:website_url]
+  end
+
   test "validates input_per_1m_tokens is non-negative" do
     model = build(:ai_model, input_per_1m_tokens: -1)
     assert_not model.valid?

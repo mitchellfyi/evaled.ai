@@ -18,7 +18,11 @@ class ModelsController < ApplicationController
     @total_count = models.count
     @page = (params[:page] || 1).to_i
     @total_pages = (@total_count.to_f / PER_PAGE).ceil
-    @page = [[@page, 1].max, @total_pages].min if @total_pages > 0
+    if @total_pages > 0
+      @page = [[@page, 1].max, @total_pages].min
+    else
+      @page = 1
+    end
 
     @models = models.offset((@page - 1) * PER_PAGE).limit(PER_PAGE)
   end

@@ -67,10 +67,18 @@
                   <%= model.formatted_context_window || "—" %>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
-                  <%= model.supports_vision ? "✅" : "—" %>
+                  <% if model.supports_vision %>
+                    <span aria-label="Supports vision">✅</span>
+                  <% else %>
+                    <span aria-label="Does not support vision">—</span>
+                  <% end %>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
-                  <%= model.supports_function_calling ? "✅" : "—" %>
+                  <% if model.supports_function_calling %>
+                    <span aria-label="Supports tools">✅</span>
+                  <% else %>
+                    <span aria-label="Does not support tools">—</span>
+                  <% end %>
                 </td>
               </tr>
             <% end %>

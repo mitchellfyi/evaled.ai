@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_15_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_15_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -192,6 +192,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_15_000000) do
     t.string "website_url"
     t.index ["family"], name: "index_ai_models_on_family"
     t.index ["provider", "family"], name: "index_ai_models_on_provider_and_family"
+    t.index ["provider", "name"], name: "index_ai_models_on_provider_and_name"
     t.index ["provider"], name: "index_ai_models_on_provider"
     t.index ["published"], name: "index_ai_models_on_published"
     t.index ["slug"], name: "index_ai_models_on_slug", unique: true

@@ -89,27 +89,63 @@
     <div class="space-y-2">
       <div class="flex items-center justify-between">
         <span class="text-sm text-gray-500">Vision</span>
-        <span class="text-sm"><%= @model.supports_vision ? "✅" : "❌" %></span>
+        <span class="text-sm">
+          <% if @model.supports_vision %>
+            <span aria-label="Supported" role="img">✅</span>
+          <% else %>
+            <span aria-label="Not supported" role="img">❌</span>
+          <% end %>
+        </span>
       </div>
       <div class="flex items-center justify-between">
         <span class="text-sm text-gray-500">Function Calling</span>
-        <span class="text-sm"><%= @model.supports_function_calling ? "✅" : "❌" %></span>
+        <span class="text-sm">
+          <% if @model.supports_function_calling %>
+            <span aria-label="Supported" role="img">✅</span>
+          <% else %>
+            <span aria-label="Not supported" role="img">❌</span>
+          <% end %>
+        </span>
       </div>
       <div class="flex items-center justify-between">
         <span class="text-sm text-gray-500">JSON Mode</span>
-        <span class="text-sm"><%= @model.supports_json_mode ? "✅" : "❌" %></span>
+        <span class="text-sm">
+          <% if @model.supports_json_mode %>
+            <span aria-label="Supported" role="img">✅</span>
+          <% else %>
+            <span aria-label="Not supported" role="img">❌</span>
+          <% end %>
+        </span>
       </div>
       <div class="flex items-center justify-between">
         <span class="text-sm text-gray-500">Streaming</span>
-        <span class="text-sm"><%= @model.supports_streaming ? "✅" : "❌" %></span>
+        <span class="text-sm">
+          <% if @model.supports_streaming %>
+            <span aria-label="Supported" role="img">✅</span>
+          <% else %>
+            <span aria-label="Not supported" role="img">❌</span>
+          <% end %>
+        </span>
       </div>
       <div class="flex items-center justify-between">
         <span class="text-sm text-gray-500">Fine-tuning</span>
-        <span class="text-sm"><%= @model.supports_fine_tuning ? "✅" : "❌" %></span>
+        <span class="text-sm">
+          <% if @model.supports_fine_tuning %>
+            <span aria-label="Supported" role="img">✅</span>
+          <% else %>
+            <span aria-label="Not supported" role="img">❌</span>
+          <% end %>
+        </span>
       </div>
       <div class="flex items-center justify-between">
         <span class="text-sm text-gray-500">Embedding</span>
-        <span class="text-sm"><%= @model.supports_embedding ? "✅" : "❌" %></span>
+        <span class="text-sm">
+          <% if @model.supports_embedding %>
+            <span aria-label="Supported" role="img">✅</span>
+          <% else %>
+            <span aria-label="Not supported" role="img">❌</span>
+          <% end %>
+        </span>
       </div>
     </div>
   </div>
@@ -170,7 +206,7 @@
     <% @model.benchmarks.each do |benchmark, score| %>
       <div class="text-center p-3 bg-gray-50 rounded-lg">
         <p class="text-xs text-gray-500 uppercase"><%= benchmark.to_s.gsub("_", " ") %></p>
-        <p class="text-2xl font-bold text-indigo-600"><%= score %></p>
+        <p class="text-2xl font-bold text-indigo-600"><%= number_with_precision(score.to_f, strip_insignificant_zeros: true) %></p>
       </div>
     <% end %>
   </div>
@@ -182,7 +218,7 @@
 <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
   <h2 class="text-lg font-semibold text-gray-900 mb-4">📝 Quick Start Guide</h2>
   <div class="prose prose-sm max-w-none text-gray-700">
-    <%= simple_format(@model.cliff_notes) %>
+    <%= simple_format(sanitize(@model.cliff_notes, tags: %w[strong em b i code pre a ul ol li], attributes: %w[href title])) %>
   </div>
 </div>
 <% end %>
