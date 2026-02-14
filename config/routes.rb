@@ -29,6 +29,10 @@ Rails.application.routes.draw do
     end
   end
 
+  # Agent Router
+  get "router", to: "router#show"
+  post "router", to: "router#match"
+
   # Agent pages (SEO-friendly)
   resources :agents, only: [:index, :show], path: "agents" do
     member do
@@ -97,6 +101,9 @@ Rails.application.routes.draw do
 
       # MCP (Model Context Protocol) endpoint
       post "mcp", to: "mcp#handle"
+
+      # Agent Router
+      resources :router, only: [:create]
     end
   end
 
