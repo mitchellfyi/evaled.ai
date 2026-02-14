@@ -133,6 +133,45 @@ class PromptClassifier
     }
   }.freeze
 
+  SUBCATEGORY_HINTS = {
+    "coding" => {
+      "debug" => /debug|fix|error|bug|issue|broken|crash/i,
+      "generate" => /write|create|build|make|generate|implement/i,
+      "refactor" => /refactor|improve|clean|optimize|simplify/i,
+      "explain" => /explain|what does|how does|why does|understand/i
+    },
+    "creative" => {
+      "writing" => /write|draft|compose|essay|blog|article|story/i,
+      "brainstorm" => /brainstorm|ideas|suggest|options|alternatives/i,
+      "roleplay" => /roleplay|pretend|act as|you are|imagine you/i
+    },
+    "reasoning" => {
+      "math" => /math|calculate|equation|formula|number|compute/i,
+      "logic" => /logic|deduce|reason|infer|conclude/i,
+      "analysis" => /analyze|evaluate|assess|compare|review/i
+    },
+    "research" => {
+      "summarize" => /summarize|summary|overview|brief|recap/i,
+      "compare" => /compare|difference|versus|vs|between/i,
+      "fact_check" => /fact|verify|true|false|accurate|source/i
+    },
+    "conversation" => {
+      "chat" => /chat|talk|hello|hi|hey/i,
+      "advice" => /advice|suggest|recommend|should|opinion/i,
+      "support" => /help|support|assist|guide|stuck/i
+    },
+    "multimodal" => {
+      "vision" => /image|picture|photo|screenshot|see|look|visual/i,
+      "audio" => /audio|voice|speech|sound|listen|transcrib/i,
+      "documents" => /document|pdf|file|scan|upload/i
+    },
+    "agentic" => {
+      "multi_step" => /step|sequence|chain|pipeline|workflow/i,
+      "tool_use" => /tool|browse|search|web|api|connect/i,
+      "autonomous" => /autonomous|automat|monitor|continuous|schedule/i
+    }
+  }.freeze
+
   Result = Struct.new(:category, :subcategory, :confidence, :scores, keyword_init: true)
 
   def self.classify(prompt)
@@ -208,46 +247,7 @@ class PromptClassifier
 
     normalized = prompt.downcase
 
-    subcategory_hints = {
-      "coding" => {
-        "debug" => /debug|fix|error|bug|issue|broken|crash/i,
-        "generate" => /write|create|build|make|generate|implement/i,
-        "refactor" => /refactor|improve|clean|optimize|simplify/i,
-        "explain" => /explain|what does|how does|why does|understand/i
-      },
-      "creative" => {
-        "writing" => /write|draft|compose|essay|blog|article|story/i,
-        "brainstorm" => /brainstorm|ideas|suggest|options|alternatives/i,
-        "roleplay" => /roleplay|pretend|act as|you are|imagine you/i
-      },
-      "reasoning" => {
-        "math" => /math|calculate|equation|formula|number|compute/i,
-        "logic" => /logic|deduce|reason|infer|conclude/i,
-        "analysis" => /analyze|evaluate|assess|compare|review/i
-      },
-      "research" => {
-        "summarize" => /summarize|summary|overview|brief|recap/i,
-        "compare" => /compare|difference|versus|vs|between/i,
-        "fact_check" => /fact|verify|true|false|accurate|source/i
-      },
-      "conversation" => {
-        "chat" => /chat|talk|hello|hi|hey/i,
-        "advice" => /advice|suggest|recommend|should|opinion/i,
-        "support" => /help|support|assist|guide|stuck/i
-      },
-      "multimodal" => {
-        "vision" => /image|picture|photo|screenshot|see|look|visual/i,
-        "audio" => /audio|voice|speech|sound|listen|transcrib/i,
-        "documents" => /document|pdf|file|scan|upload/i
-      },
-      "agentic" => {
-        "multi_step" => /step|sequence|chain|pipeline|workflow/i,
-        "tool_use" => /tool|browse|search|web|api|connect/i,
-        "autonomous" => /autonomous|automat|monitor|continuous|schedule/i
-      }
-    }
-
-    hints = subcategory_hints[category]
+    hints = SUBCATEGORY_HINTS[category]
     return config[:subcategories].first unless hints
 
     best_sub = hints.max_by { |_, pattern| normalized.scan(pattern).size }

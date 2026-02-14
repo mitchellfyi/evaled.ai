@@ -12,7 +12,13 @@ module Api
         end
 
         classification = PromptClassifier.classify(prompt)
-        matches = AgentRouter.route(prompt, limit: params[:limit]&.to_i || 5)
+
+        raw_limit = params[:limit]
+        limit = Integer(raw_limit, exception: false) if raw_limit.present?
+        limit = 5 if limit.nil? || limit <= 0
+        limit = [limit, 50].min
+
+        matches = AgentRouter.route(prompt, limit: limit)
 
         render json: {
           classification: {

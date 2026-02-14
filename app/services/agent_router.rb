@@ -29,6 +29,10 @@ class AgentRouter
   def route(prompt, limit: 5)
     return [] if prompt.blank?
 
+    # Normalize limit to a safe range
+    limit = [limit.to_i, 1].max
+    limit = [limit, 20].min
+
     # 1. Classify the prompt
     classification = PromptClassifier.classify(prompt)
 
@@ -63,9 +67,9 @@ class AgentRouter
         scope.or(agents.where(Agent.arel_table[column].gt(0)))
       end
 
-      # Combine: category match OR domain match
-      combined_ids = (category_agents.pluck(:id) + domain_agents.pluck(:id) + domain_score_agents.pluck(:id)).uniq
-      agents.where(id: combined_ids).order(score: :desc).limit(20)
+      # Combine: category match OR domain match, in a single relation
+      category_agents.or(domain_agents).or(domain_score_agents)
+        .distinct.order(score: :desc).limit(20)
     else
       category_agents.order(score: :desc).limit(20)
     end
