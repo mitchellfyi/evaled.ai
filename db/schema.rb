@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_10_060000) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_15_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -153,6 +153,49 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_10_060000) do
     t.index ["slug"], name: "index_agents_on_slug", unique: true
     t.index ["stars"], name: "index_agents_on_stars", order: :desc
     t.index ["target_domains"], name: "index_agents_on_target_domains", using: :gin
+  end
+
+  create_table "ai_models", force: :cascade do |t|
+    t.string "api_model_id"
+    t.string "api_reference_url"
+    t.decimal "batch_discount_percentage", precision: 5, scale: 2
+    t.jsonb "benchmarks", default: {}
+    t.string "best_for", default: [], array: true
+    t.decimal "cached_input_per_1m_tokens", precision: 10, scale: 4
+    t.string "changelog_url"
+    t.text "cliff_notes"
+    t.integer "context_window"
+    t.datetime "created_at", null: false
+    t.string "docs_url"
+    t.string "family"
+    t.string "free_tier_description"
+    t.string "github_url"
+    t.decimal "input_per_1m_tokens", precision: 10, scale: 4
+    t.string "key_features", default: [], array: true
+    t.datetime "last_updated_at"
+    t.string "limitations", default: [], array: true
+    t.integer "max_output_tokens"
+    t.string "name", null: false
+    t.decimal "output_per_1m_tokens", precision: 10, scale: 4
+    t.string "provider", null: false
+    t.boolean "published", default: true
+    t.date "release_date"
+    t.string "slug", null: false
+    t.string "status", default: "active"
+    t.boolean "supports_embedding", default: false
+    t.boolean "supports_fine_tuning", default: false
+    t.boolean "supports_function_calling", default: false
+    t.boolean "supports_json_mode", default: false
+    t.boolean "supports_streaming", default: false
+    t.boolean "supports_vision", default: false
+    t.datetime "updated_at", null: false
+    t.string "website_url"
+    t.index ["family"], name: "index_ai_models_on_family"
+    t.index ["provider", "family"], name: "index_ai_models_on_provider_and_family"
+    t.index ["provider"], name: "index_ai_models_on_provider"
+    t.index ["published"], name: "index_ai_models_on_published"
+    t.index ["slug"], name: "index_ai_models_on_slug", unique: true
+    t.index ["status"], name: "index_ai_models_on_status"
   end
 
   create_table "api_keys", force: :cascade do |t|
