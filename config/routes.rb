@@ -22,6 +22,13 @@ Rails.application.routes.draw do
   # Documentation
   get "docs/api", to: "docs#api", as: :api_docs
 
+  # AI Models directory
+  resources :models, only: [:index, :show] do
+    collection do
+      get :compare
+    end
+  end
+
   # Agent Router
   get "router", to: "router#show"
   post "router", to: "router#match"
