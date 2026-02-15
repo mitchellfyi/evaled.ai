@@ -143,7 +143,7 @@ module AiModels
       )
 
       if model.save
-        model.changes.create!(
+        model.sync_changes.create!(
           change_type: "created",
           new_values: model.attributes.slice(*AiModel::SYNCABLE_FIELDS),
           source: source

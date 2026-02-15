@@ -160,10 +160,10 @@ class AiModelTest < ActiveSupport::TestCase
 
   # Sync-related tests
 
-  test "has_many changes" do
+  test "has_many sync_changes" do
     model = create(:ai_model)
     change = create(:ai_model_change, ai_model: model)
-    assert_includes model.changes, change
+    assert_includes model.sync_changes, change
   end
 
   test "syncable scope returns models with sync_enabled" do
@@ -225,7 +225,7 @@ class AiModelTest < ActiveSupport::TestCase
     assert_not_nil model.last_synced_at
     assert_equal "openrouter", model.sync_source
 
-    change = model.changes.last
+    change = model.sync_changes.last
     assert_equal "pricing_change", change.change_type
     assert_equal "openrouter", change.source
   end
@@ -247,7 +247,7 @@ class AiModelTest < ActiveSupport::TestCase
 
     model.apply_sync_update!({ status: "deprecated" }, source: "manual")
 
-    change = model.changes.last
+    change = model.sync_changes.last
     assert_equal "deprecated", change.change_type
   end
 
@@ -256,7 +256,7 @@ class AiModelTest < ActiveSupport::TestCase
 
     model.apply_sync_update!({ supports_vision: true }, source: "manual")
 
-    change = model.changes.last
+    change = model.sync_changes.last
     assert_equal "capability_change", change.change_type
   end
 
@@ -269,7 +269,7 @@ class AiModelTest < ActiveSupport::TestCase
       confidence: 0.75
     )
 
-    change = model.changes.last
+    change = model.sync_changes.last
     assert_equal 0.75, change.confidence
   end
 end

@@ -8,7 +8,7 @@ class AiModel < ApplicationRecord
                          supports_fine_tuning supports_embedding context_window max_output_tokens].freeze
   SYNCABLE_FIELDS = (PRICING_FIELDS + CAPABILITY_FIELDS + %w[status]).freeze
 
-  has_many :changes, class_name: "AiModelChange", dependent: :destroy
+  has_many :sync_changes, class_name: "AiModelChange", dependent: :destroy
 
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[a-z0-9-]+\z/ }
@@ -115,7 +115,7 @@ class AiModel < ApplicationRecord
       self.sync_source = source
       save!
 
-      changes.create!(
+      sync_changes.create!(
         change_type: change_type,
         old_values: old_values,
         new_values: new_values,

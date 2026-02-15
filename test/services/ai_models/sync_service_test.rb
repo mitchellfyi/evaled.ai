@@ -56,7 +56,7 @@ module AiModels
 
       existing.reload
       assert_equal 2.5, existing.input_per_1m_tokens.to_f
-      assert_equal 1, existing.changes.count
+      assert_equal 1, existing.sync_changes.count
     end
 
     test "sync_all creates change records for updates" do
@@ -78,7 +78,7 @@ module AiModels
         @service.sync_all
       end
 
-      change = existing.changes.last
+      change = existing.sync_changes.last
       assert_equal "pricing_change", change.change_type
       assert_equal "openrouter", change.source
       assert_equal({ "input_per_1m_tokens" => 5.0 }, change.old_values)
